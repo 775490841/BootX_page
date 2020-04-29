@@ -55,7 +55,7 @@ class TableList extends Component<TableListProps> {
               )}
             </Fragment>
           ) : (
-            <a onClick={() => this.install(record.installUrl)}>安装</a>
+            <>{record.installUrl && <a onClick={() => this.install(record.installUrl)}>安装</a>}</>
           )}
         </Fragment>
       ),
