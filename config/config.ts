@@ -81,7 +81,6 @@ export default defineConfig({
                 {
                   name: 'storagePlugin',
                   path: '/setting/storagePlugin',
-                  authority: ['admin', 'setting:storagePlugin'],
                   routes: [
                     {
                       path: '/setting/storagePlugin',
