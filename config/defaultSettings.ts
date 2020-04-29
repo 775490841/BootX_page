@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'BootX 急速开发平台',
+  title: 'BX 开发平台',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;
