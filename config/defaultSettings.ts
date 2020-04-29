@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Ant Design Pro',
+  title: 'BX 开发平台',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;
