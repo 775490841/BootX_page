@@ -93,12 +93,6 @@ export default defineConfig({
                       hideInMenu: true,
                       component: './setting/plugin/storagePlugin/ftpStorage',
                     },
-                    {
-                      path: '/setting/storagePlugin/oss_storage/setting',
-                      name: 'ftpStorage',
-                      hideInMenu: true,
-                      component: './setting/plugin/storagePlugin/ossStorage',
-                    },
                   ],
                 },
               ],
