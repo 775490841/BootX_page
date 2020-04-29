@@ -106,6 +106,12 @@ export default defineConfig({
                     },
                   ],
                 },
+                {
+                  name: 'setting',
+                  icon: 'setting',
+                  path: '/setting/setting',
+                  component: './setting/setting',
+                },
               ],
             },
             {
