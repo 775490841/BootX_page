@@ -81,7 +81,6 @@ export default defineConfig({
                 {
                   name: 'storagePlugin',
                   path: '/setting/storagePlugin',
-                  authority: ['admin', 'setting:storagePlugin'],
                   routes: [
                     {
                       path: '/setting/storagePlugin',
@@ -94,12 +93,24 @@ export default defineConfig({
                       component: './setting/plugin/storagePlugin/ftpStorage',
                     },
                     {
+                      path: '/setting/storagePlugin/local_storage/setting',
+                      name: 'localStorage',
+                      hideInMenu: true,
+                      component: './setting/plugin/storagePlugin/localStorage',
+                    },
+                    {
                       path: '/setting/storagePlugin/oss_storage/setting',
-                      name: 'ftpStorage',
+                      name: 'ossStorage',
                       hideInMenu: true,
                       component: './setting/plugin/storagePlugin/ossStorage',
                     },
                   ],
+                },
+                {
+                  name: 'setting',
+                  icon: 'setting',
+                  path: '/setting/setting',
+                  component: './setting/setting',
                 },
               ],
             },
