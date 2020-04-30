@@ -72,7 +72,6 @@ class Login extends Component<LoginProps, LoginState> {
 
             <UserName
               name="username"
-              placeholder="用户名: admin or user"
               rules={[
                 {
                   required: true,
@@ -82,7 +81,6 @@ class Login extends Component<LoginProps, LoginState> {
             />
             <Password
               name="password"
-              placeholder="密码: ant.design"
               rules={[
                 {
                   required: true,
