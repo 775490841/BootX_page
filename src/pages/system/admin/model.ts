@@ -12,6 +12,8 @@ import {
   permission,
   checkExport,
   importSave,
+  departmentTree,
+  add,
 } from './service';
 
 import { TableListData, TableListItem } from './data.d';
@@ -41,6 +43,8 @@ export interface ModelType {
     permission: Effect;
     checkExport: Effect;
     importSave: Effect;
+    departmentTree: Effect;
+    add: Effect;
   };
   reducers: {
     listInfo: Reducer<StateType>;
@@ -127,6 +131,18 @@ const Model: ModelType = {
     },
     *importSave({ payload, callback }, { call }) {
       const response = yield call(importSave, payload);
+      if (callback) {
+        callback(response);
+      }
+    },
+    *departmentTree({ payload, callback }, { call }) {
+      const response = yield call(departmentTree, payload);
+      if (callback) {
+        callback(response);
+      }
+    },
+    *add({ payload, callback }, { call }) {
+      const response = yield call(add, payload);
       if (callback) {
         callback(response);
       }
