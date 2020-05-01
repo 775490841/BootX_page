@@ -45,7 +45,7 @@ class TableList extends Component<TableListProps> {
           {record.isInstalled ? (
             <Fragment>
               {record.settingUrl && (
-                <Link to={`/setting/storagePlugin/${record.settingUrl}`}>配置</Link>
+                <Link to={`/system/storagePlugin/${record.settingUrl}`}>配置</Link>
               )}
               {record.uninstallUrl && (
                 <Fragment>
