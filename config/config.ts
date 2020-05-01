@@ -105,6 +105,12 @@ export default defineConfig({
                   path: '/setting/admin',
                   component: './setting/admin',
                 },
+                {
+                  name: 'department',
+                  icon: 'department',
+                  path: '/setting/department',
+                  component: './setting/department',
+                },
               ],
             },
             {
