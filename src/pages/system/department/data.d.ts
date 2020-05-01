@@ -6,7 +6,7 @@ export interface TableListItem {
   name?: string;
   order?: number;
   createdDate?: Date;
-  children: TableListItem[];
+  children?: TableListItem[];
 }
 
 export interface DepartmentTree {
@@ -15,4 +15,6 @@ export interface DepartmentTree {
   children: DepartmentTree[];
 }
 
-export interface TableListParams {}
+export interface TableListParams {
+  id: number;
+}
