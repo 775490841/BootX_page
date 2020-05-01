@@ -50,8 +50,3 @@ export interface TableListParams {
   orderProperty: string;
   orderDirection: string;
 }
-
-export interface DepartmentData {
-  id: number;
-  name: string;
-}
