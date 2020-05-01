@@ -12,6 +12,14 @@ export async function list(params: TableListParams) {
 }
 
 export async function save(params: TableListParams) {
+  if (params.id) {
+    return request(`${constants.baseUrl}/department/update`, {
+      method: 'POST',
+      data: {
+        ...params,
+      },
+    });
+  }
   return request(`${constants.baseUrl}/department/save`, {
     method: 'POST',
     data: {
@@ -22,6 +30,15 @@ export async function save(params: TableListParams) {
 
 export async function tree(params: TableListParams) {
   return request(`${constants.baseUrl}/department/tree`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function edit(params: TableListParams) {
+  return request(`${constants.baseUrl}/department/edit`, {
     method: 'POST',
     data: {
       ...params,
