@@ -107,7 +107,22 @@ export default defineConfig({
                 {
                   name: 'department',
                   path: '/system/department',
-                  component: './system/department',
+                  routes: [
+                    {
+                      path: '/system/department',
+                      component: './system/department',
+                    },
+                    {
+                      path: '/system/department/add',
+                      name: 'add',
+                      component: './system/department/add',
+                    },
+                    {
+                      path: '/system/department/edit/:id',
+                      name: 'edit',
+                      component: './system/department/add',
+                    },
+                  ],
                 },
               ],
             },
