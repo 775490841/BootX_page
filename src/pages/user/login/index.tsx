@@ -1,11 +1,11 @@
 import { Alert } from 'antd';
 import React, { Component } from 'react';
 import { Dispatch, AnyAction, connect } from 'umi';
+import { uuid } from '@/utils/common';
 import { StateType } from './model';
 import styles from './style.less';
 import { LoginParamsType } from './service';
 import LoginFrom from './components/Login';
-import { uuid } from '@/utils/common';
 
 const { Tab, UserName, Password, Captcha, Submit } = LoginFrom;
 
