@@ -177,7 +177,7 @@ class BasicForm extends Component<BasicFormProps> {
               <Button type="primary" htmlType="submit" loading={submitting}>
                 保存
               </Button>
-              <Link to="/setting/storagePlugin">
+              <Link to="/system/storagePlugin">
                 <Button style={{ marginLeft: 8 }}>返回</Button>
               </Link>
             </FormItem>
