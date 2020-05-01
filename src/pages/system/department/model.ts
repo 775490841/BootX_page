@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'umi';
 import { EffectsCommandMap } from 'dva';
-import { list, save, tree } from './service';
+import { list, save, tree, edit } from './service';
 
 import { TableListItem } from './data.d';
 
@@ -21,10 +21,10 @@ export interface ModelType {
     list: Effect;
     save: Effect;
     tree: Effect;
+    edit: Effect;
   };
   reducers: {
     listInfo: Reducer<StateType>;
-    editInfo: Reducer<StateType>;
   };
 }
 
@@ -51,6 +51,12 @@ const Model: ModelType = {
     },
     *tree({ payload, callback }, { call }) {
       const response = yield call(tree, payload);
+      if (callback) {
+        callback(response);
+      }
+    },
+    *edit({ payload, callback }, { call }) {
+      const response = yield call(edit, payload);
       if (callback) {
         callback(response);
       }
