@@ -52,12 +52,23 @@ export default {
 
   'menu.system': '系统管理',
   'menu.system.plugin': '系统管理',
+  'menu.system.storagePlugin.ftpStorage': 'FTP存储',
+  'menu.system.storagePlugin.localStorage': '本地存储',
+  'menu.system.storagePlugin.ossStorage': '阿里云存储',
   'menu.system.admin': '账号管理',
   'menu.system.admin.add': '添加',
   'menu.system.admin.edit': '修改',
   'menu.system.role': '系统角色',
   'menu.system.role.add': '添加',
   'menu.system.role.edit': '修改',
+
+  'menu.system.wordType': '字典分类',
+  'menu.system.wordType.add': '添加',
+  'menu.system.wordType.edit': '修改',
+  'menu.system.word': '字典项',
+  'menu.system.word.add': '添加',
+  'menu.system.word.edit': '修改',
+
   'menu.system.storagePlugin': '存储插件',
   'menu.system.department': '部门管理',
   'menu.system.department.add': '添加',
