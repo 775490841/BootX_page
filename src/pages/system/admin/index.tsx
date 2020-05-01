@@ -1,19 +1,14 @@
 import { Button, Card, Col, Form, Input, Row, message, Tag, Modal, Select, Divider } from 'antd';
-import {
-  PlusOutlined,
-  UploadOutlined,
-  DownloadOutlined,
-  ReloadOutlined,
-  ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import { PlusOutlined, ReloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { Component, Fragment } from 'react';
 
-import { Dispatch, Link } from 'umi';
+import { Dispatch } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
 import { FormInstance } from 'antd/lib/form';
 import { getSiteInfo } from '@/utils/common';
+import { history } from '@@/core/history';
 import { StateType } from './model';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
 
@@ -41,6 +36,11 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   columns: StandardTableColumnProps[] = [
+    {
+      title: '编号',
+      dataIndex: 'cardNo',
+      width: 70,
+    },
     {
       title: '姓名',
       dataIndex: 'name',
@@ -77,9 +77,7 @@ class TableList extends Component<TableListProps, TableListState> {
       width: 220,
       render: (text, record: TableListItem) => (
         <Fragment>
-          <a href={`/system/admin/edit/${record.id}`}>编辑</a>
-          <Divider type="vertical" />
-          <a href={`/system/admin/edit/${record.id}`}>查看</a>
+          <a onClick={() => history.push(`/system/admin/edit/${record.id}`)}>编辑</a>
           <Divider type="vertical" />
           <a onClick={() => this.update(record, 'remove')}>删除</a>
           <Divider type="vertical" />
@@ -211,23 +209,19 @@ class TableList extends Component<TableListProps, TableListState> {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button icon={<PlusOutlined />} type="primary">
+              <Button
+                disabled={loading}
+                icon={<PlusOutlined />}
+                onClick={() => history.push('/system/admin/add')}
+                type="primary"
+              >
                 新建
               </Button>
-              <Link to="/system/admin/import">
-                <Button icon={<UploadOutlined />} type="primary">
-                  批量导入
-                </Button>
-              </Link>
-              <Button icon={<DownloadOutlined />} type="primary">
-                导出
-              </Button>
               <Button
-                icon={<ReloadOutlined />}
                 disabled={loading}
-                loading={loading}
+                icon={<ReloadOutlined />}
                 type="primary"
-                onClick={() => this.componentDidMount()}
+                onClick={() => this.list({})}
               >
                 刷新
               </Button>
