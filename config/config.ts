@@ -115,11 +115,13 @@ export default defineConfig({
                     {
                       path: '/system/department/add',
                       name: 'add',
+                      hideInMenu: true,
                       component: './system/department/add',
                     },
                     {
                       path: '/system/department/edit/:id',
                       name: 'edit',
+                      hideInMenu: true,
                       component: './system/department/add',
                     },
                   ],

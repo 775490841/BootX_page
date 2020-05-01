@@ -56,6 +56,7 @@ export default {
   'menu.system.storagePlugin': '存储插件',
   'menu.system.department': '部门管理',
   'menu.system.department.add': '添加',
+  'menu.system.department.edit': '修改',
   'menu.system.setting': '系统设置',
   'menu.index': '首页',
 };
