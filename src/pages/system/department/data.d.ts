@@ -14,3 +14,5 @@ export interface DepartmentTree {
   name: string;
   children: DepartmentTree[];
 }
+
+export interface TableListParams {}
