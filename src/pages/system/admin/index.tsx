@@ -1,6 +1,5 @@
 import { Button, Card, Col, Form, Input, Row, message, Tag, Modal, Select, Divider } from 'antd';
 import {
-  DeleteOutlined,
   PlusOutlined,
   UploadOutlined,
   DownloadOutlined,
@@ -14,6 +13,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
 import { FormInstance } from 'antd/lib/form';
+import { getSiteInfo } from '@/utils/common';
 import { StateType } from './model';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
 
@@ -60,10 +60,6 @@ class TableList extends Component<TableListProps, TableListState> {
       width: 110,
     },
     {
-      title: '所属部门',
-      dataIndex: 'departmentName',
-    },
-    {
       title: '状态',
       dataIndex: 'isEnabled',
       width: 60,
@@ -73,31 +69,20 @@ class TableList extends Component<TableListProps, TableListState> {
       title: '创建时间',
       dataIndex: 'gmtCreate',
       sorter: true,
-      width: 150,
+      width: 170,
       render: (val: string) => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
-      width: 260,
+      width: 220,
       render: (text, record: TableListItem) => (
         <Fragment>
-          <a href={`/setting/admin/edit/${record.id}`}>编辑</a>
+          <a href={`/system/admin/edit/${record.id}`}>编辑</a>
+          <Divider type="vertical" />
+          <a href={`/system/admin/edit/${record.id}`}>查看</a>
           <Divider type="vertical" />
           <a onClick={() => this.update(record, 'remove')}>删除</a>
           <Divider type="vertical" />
-          <a href={`/setting/admin/edit/${record.id}`}>查看</a>
-          <Divider type="vertical" />
-          {record.isEnabled ? (
-            <>
-              <a onClick={() => this.update(record, 'disabled')}>禁用</a>
-              <Divider type="vertical" />
-            </>
-          ) : (
-            <>
-              <a onClick={() => this.update(record, 'enabled')}>启用</a>
-              <Divider type="vertical" />
-            </>
-          )}
           <a onClick={() => this.update(record, 'reset')}>重置密码</a>
         </Fragment>
       ),
@@ -131,7 +116,7 @@ class TableList extends Component<TableListProps, TableListState> {
         return '您正在执行账号启用操作';
       }
       if (type1 === 'reset') {
-        return '您正在执行账户重置密码操作，密码将重置为123456！！！';
+        return `您正在执行账户重置密码操作，密码将重置为${getSiteInfo('defaultPassword')}！！！`;
       }
       if (type1 === 'disabled') {
         return '您正在执行账号禁用操作';
@@ -229,10 +214,7 @@ class TableList extends Component<TableListProps, TableListState> {
               <Button icon={<PlusOutlined />} type="primary">
                 新建
               </Button>
-              <Button icon={<DeleteOutlined />} type="primary">
-                删除
-              </Button>
-              <Link to="/setting/admin/import">
+              <Link to="/system/admin/import">
                 <Button icon={<UploadOutlined />} type="primary">
                   批量导入
                 </Button>
