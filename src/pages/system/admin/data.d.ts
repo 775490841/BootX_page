@@ -41,6 +41,7 @@ export interface TableListData {
  * 搜索的数据
  */
 export interface TableListParams {
+  id: null;
   sorter: string;
   status: string;
   name: string;
