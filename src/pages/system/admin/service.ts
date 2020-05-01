@@ -1,6 +1,6 @@
 import request from '@/utils/request';
-import { TableListParams } from './data.d';
 import constants from '@/utils/constants';
+import { TableListParams } from './data.d';
 
 export async function list(params: TableListParams) {
   return request(`${constants.baseUrl}/admin/list`, {
