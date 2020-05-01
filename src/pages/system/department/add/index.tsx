@@ -119,18 +119,10 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
             <FormItem name="id" style={{ display: 'none' }}>
               <Input type="hidden" />
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="上级部门"
-              name="parentId"
-              rules={[
-                {
-                  required: true,
-                  message: '必填',
-                },
-              ]}
-            >
-              <TreeSelect treeDefaultExpandAll>{this.renderTreeSelect(departmentTree)}</TreeSelect>
+            <FormItem {...formItemLayout} label="上级部门" name="parentId">
+              <TreeSelect showSearch showArrow treeLine treeDefaultExpandAll>
+                {this.renderTreeSelect(departmentTree)}
+              </TreeSelect>
             </FormItem>
             <FormItem
               {...formItemLayout}

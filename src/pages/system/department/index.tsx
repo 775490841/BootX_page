@@ -1,5 +1,5 @@
-import { Button, Card, Tag, Divider } from 'antd';
-import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Card, Tag, Divider, Modal, message } from 'antd';
+import { PlusOutlined, ReloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { Component, Fragment } from 'react';
 
 import { Dispatch, history } from 'umi';
@@ -55,12 +55,18 @@ class TableList extends Component<TableListProps, TableListState> {
     },
     {
       title: '操作',
-      width: 90,
+      width: 150,
       render: (text, record: TableListItem) => (
         <Fragment>
           <a onClick={() => history.push(`/system/department/edit/${record.id}`)}>编辑</a>
           <Divider type="vertical" />
           <a href={`/system/department/edit/${record.id}`}>查看</a>
+          {record.children && record.children.length > 0 ? null : (
+            <>
+              <Divider type="vertical" />
+              <a onClick={() => this.remove(record.id)}>删除</a>
+            </>
+          )}
         </Fragment>
       ),
     },
@@ -76,6 +82,35 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'department/list',
       payload: {
         ...params,
+      },
+    });
+  };
+
+  remove = (id: number) => {
+    const { dispatch } = this.props;
+    if (!id) {
+      return;
+    }
+    Modal.confirm({
+      title: '提醒',
+      content: '您正在执行数据删除操作！！！',
+      icon: <ExclamationCircleOutlined />,
+      onOk: () => {
+        dispatch({
+          type: 'department/remove',
+          payload: {
+            ids: id,
+          },
+          callback: (response: { type: string; content: string }) => {
+            const { type, content } = response;
+            if (type === 'success') {
+              message.success(content);
+              this.list({});
+            } else {
+              message.error(content);
+            }
+          },
+        });
       },
     });
   };

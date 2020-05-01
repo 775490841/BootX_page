@@ -2,7 +2,7 @@
  * 列表展示的字段
  */
 export interface TableListItem {
-  id?: number;
+  id: number;
   name?: string;
   order?: number;
   createdDate?: Date;

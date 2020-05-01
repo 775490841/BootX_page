@@ -45,3 +45,12 @@ export async function edit(params: TableListParams) {
     },
   });
 }
+
+export async function remove(params: TableListParams) {
+  return request(`${constants.baseUrl}/department/delete`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
