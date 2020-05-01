@@ -30,10 +30,6 @@ class TableList extends Component<TableListProps> {
   };
 
   render() {
-    const {
-      setting: { data },
-    } = this.props;
-    console.log(data);
     return <PageHeaderWrapper title={false}>setting</PageHeaderWrapper>;
   }
 }
