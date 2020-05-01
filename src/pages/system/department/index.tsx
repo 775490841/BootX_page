@@ -60,7 +60,6 @@ class TableList extends Component<TableListProps, TableListState> {
         <Fragment>
           <a onClick={() => history.push(`/system/department/edit/${record.id}`)}>编辑</a>
           <Divider type="vertical" />
-          <a href={`/system/department/edit/${record.id}`}>查看</a>
           {record.children && record.children.length > 0 ? null : (
             <>
               <Divider type="vertical" />
