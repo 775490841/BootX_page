@@ -2,7 +2,7 @@ import { Button, Card, Tag, Divider } from 'antd';
 import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import React, { Component, Fragment } from 'react';
 
-import { Dispatch } from 'umi';
+import { Dispatch, history } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -13,7 +13,6 @@ import StandardTable from './components/StandardTable';
 import { TableListItem } from './data.d';
 
 import styles from './style.less';
-import CreateFrom from './components/CreateFrom';
 
 interface TableListProps {
   dispatch: Dispatch<any>;
@@ -22,14 +21,10 @@ interface TableListProps {
 }
 
 interface TableListState {
-  addModalVisible: boolean;
+  values: TableListItem;
 }
 
 class TableList extends Component<TableListProps, TableListState> {
-  state: TableListState = {
-    addModalVisible: false,
-  };
-
   columns: ColumnProps<TableListItem>[] = [
     {
       title: '名称',
@@ -63,7 +58,7 @@ class TableList extends Component<TableListProps, TableListState> {
       width: 90,
       render: (text, record: TableListItem) => (
         <Fragment>
-          <a href={`/system/department/edit/${record.id}`}>编辑</a>
+          <a onClick={() => history.push(`/system/department/edit/${record.id}`)}>编辑</a>
           <Divider type="vertical" />
           <a href={`/system/department/edit/${record.id}`}>查看</a>
         </Fragment>
@@ -85,22 +80,11 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
-  handleAdd = (addModalVisible: boolean, refresh?: boolean) => {
-    this.setState({
-      addModalVisible: !!addModalVisible,
-    });
-    if (refresh) {
-      this.list({});
-    }
-  };
-
   render() {
     const {
       department: { data },
       loading,
     } = this.props;
-
-    const { addModalVisible } = this.state;
 
     return (
       <PageHeaderWrapper title={false}>
@@ -110,8 +94,8 @@ class TableList extends Component<TableListProps, TableListState> {
               <Button
                 disabled={loading}
                 icon={<PlusOutlined />}
+                onClick={() => history.push('/system/department/add')}
                 type="primary"
-                onClick={() => this.handleAdd(true)}
               >
                 新建
               </Button>
@@ -133,12 +117,6 @@ class TableList extends Component<TableListProps, TableListState> {
             />
           </div>
         </Card>
-        {addModalVisible ? (
-          <CreateFrom
-            addModalVisible={addModalVisible}
-            onClose={() => this.handleAdd(false, true)}
-          />
-        ) : null}
       </PageHeaderWrapper>
     );
   }
