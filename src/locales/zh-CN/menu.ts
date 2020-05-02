@@ -61,6 +61,9 @@ export default {
   'menu.system.role': '系统角色',
   'menu.system.role.add': '添加',
   'menu.system.role.edit': '修改',
+  'menu.system.menu': '系统菜单',
+  'menu.system.menu.add': '添加',
+  'menu.system.menu.edit': '修改',
 
   'menu.system.wordType': '字典分类',
   'menu.system.wordType.add': '添加',
