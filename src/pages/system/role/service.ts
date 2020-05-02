@@ -90,12 +90,3 @@ export async function updatePermission(params: TableListParams) {
     },
   });
 }
-
-export async function permissionView(params: TableListParams) {
-  return request(`${constants.baseUrl}/role/permission_view`, {
-    method: 'POST',
-    data: {
-      ...params,
-    },
-  });
-}
