@@ -38,6 +38,7 @@ const Model: ModelType = {
       // Login successfully
       if (response.status === 'ok') {
         message.success('登录成功！');
+        localStorage.setItem('token', response.token);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
