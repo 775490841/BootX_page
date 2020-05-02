@@ -1,6 +1,16 @@
 import { AnyAction, Reducer } from 'umi';
 import { EffectsCommandMap } from 'dva';
-import { list, edit, save, remove, disabled, enabled, departmentTree } from './service';
+import {
+  list,
+  edit,
+  save,
+  remove,
+  disabled,
+  enabled,
+  departmentTree,
+  permission,
+  updatePermission,
+} from './service';
 
 import { TableListData, TableListItem } from './data.d';
 
@@ -25,6 +35,8 @@ export interface ModelType {
     disabled: Effect;
     enabled: Effect;
     departmentTree: Effect;
+    permission: Effect;
+    updatePermission: Effect;
   };
   reducers: {
     listInfo: Reducer<StateType>;
@@ -87,6 +99,18 @@ const Model: ModelType = {
     },
     *departmentTree({ payload, callback }, { call }) {
       const response = yield call(departmentTree, payload);
+      if (callback) {
+        callback(response);
+      }
+    },
+    *permission({ payload, callback }, { call }) {
+      const response = yield call(permission, payload);
+      if (callback) {
+        callback(response);
+      }
+    },
+    *updatePermission({ payload, callback }, { call }) {
+      const response = yield call(updatePermission, payload);
       if (callback) {
         callback(response);
       }
