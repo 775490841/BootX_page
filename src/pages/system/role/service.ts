@@ -72,3 +72,30 @@ export async function departmentTree(params: TableListParams) {
     },
   });
 }
+
+export async function permission(params: TableListParams) {
+  return request(`${constants.baseUrl}/role/permission`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function updatePermission(params: TableListParams) {
+  return request(`${constants.baseUrl}/role/update_permission`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function permissionView(params: TableListParams) {
+  return request(`${constants.baseUrl}/role/permission_view`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}

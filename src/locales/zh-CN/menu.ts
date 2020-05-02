@@ -64,6 +64,9 @@ export default {
   'menu.system.menu': '系统菜单',
   'menu.system.menu.add': '添加',
   'menu.system.menu.edit': '修改',
+  'menu.system.permission': '系统权限',
+  'menu.system.permission.add': '添加',
+  'menu.system.permission.edit': '修改',
 
   'menu.system.wordType': '字典分类',
   'menu.system.wordType.add': '添加',

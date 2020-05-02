@@ -2,12 +2,12 @@
  * 列表展示的字段
  */
 export interface TableListItem {
-  id: number;
-  name: string;
-  memo: string;
-  isEnabled: boolean;
-  departmentName: string;
-  createdDate: Date;
+  id?: number;
+  name?: string;
+  memo?: string;
+  isEnabled?: boolean;
+  departmentName?: string;
+  createdDate?: Date;
 }
 
 /**
