@@ -72,12 +72,3 @@ export async function tree(params: TableListParams) {
     },
   });
 }
-
-export async function add(params: TableListParams) {
-  return request(`${constants.baseUrl}/menu/add`, {
-    method: 'POST',
-    data: {
-      ...params,
-    },
-  });
-}
