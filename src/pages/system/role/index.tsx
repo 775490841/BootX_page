@@ -1,5 +1,11 @@
 import { Button, Card, Col, Form, Input, Row, message, Tag, Modal, Select, Divider } from 'antd';
-import { PlusOutlined, ReloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  ReloadOutlined,
+  ExclamationCircleOutlined,
+  DeleteOutlined,
+  UserAddOutlined,
+} from '@ant-design/icons';
 import React, { Component, Fragment } from 'react';
 
 import { Dispatch } from 'umi';
@@ -15,6 +21,7 @@ import StandardTable, { StandardTableColumnProps } from './components/StandardTa
 import { TableListItem } from './data.d';
 
 import styles from './style.less';
+import AllocationPermission from '@/pages/system/role/allocatePermission';
 
 const FormItem = Form.Item;
 
@@ -26,6 +33,8 @@ interface TableListProps {
 
 interface TableListState {
   selectedRows: TableListItem[];
+  allocatePermissionModalVisible: boolean;
+  allocatePermissionRecord: TableListItem;
 }
 
 class TableList extends Component<TableListProps, TableListState> {
@@ -33,6 +42,8 @@ class TableList extends Component<TableListProps, TableListState> {
 
   state: TableListState = {
     selectedRows: [],
+    allocatePermissionModalVisible: false,
+    allocatePermissionRecord: {},
   };
 
   columns: StandardTableColumnProps[] = [
@@ -183,13 +194,39 @@ class TableList extends Component<TableListProps, TableListState> {
     );
   };
 
+  /**
+   * 给角色分配权限
+   */
+  allocatePermission = () => {
+    const { selectedRows } = this.state;
+    message.destroy();
+    if (selectedRows.length === 0) {
+      message.warn('请选择一条记录');
+    }
+    if (selectedRows.length > 1) {
+      message.warn('只能选择一条记录');
+    } else {
+      this.setState({
+        allocatePermissionModalVisible: true,
+        allocatePermissionRecord: selectedRows[0],
+      });
+    }
+  };
+
+  onClose = () => {
+    this.setState({
+      allocatePermissionModalVisible: false,
+      allocatePermissionRecord: {},
+    });
+  };
+
   render() {
     const {
       role: { data },
       loading,
     } = this.props;
 
-    const { selectedRows } = this.state;
+    const { selectedRows, allocatePermissionModalVisible, allocatePermissionRecord } = this.state;
 
     return (
       <PageHeaderWrapper title={false}>
@@ -203,7 +240,24 @@ class TableList extends Component<TableListProps, TableListState> {
                 onClick={() => history.push('/system/role/add')}
                 type="primary"
               >
-                新建
+                新增
+              </Button>
+              <Button
+                title={loading || selectedRows.length === 0 ? '至少选择一条记录' : ''}
+                disabled={loading || selectedRows.length === 0}
+                icon={<DeleteOutlined />}
+                onClick={() => history.push('/system/role/add')}
+                type="danger"
+              >
+                删除
+              </Button>
+              <Button
+                title={loading || selectedRows.length === 0 ? '请选择一条记录' : ''}
+                disabled={loading || selectedRows.length === 0}
+                icon={<UserAddOutlined />}
+                onClick={this.allocatePermission}
+              >
+                权限分配
               </Button>
               <Button
                 disabled={loading}
@@ -226,6 +280,13 @@ class TableList extends Component<TableListProps, TableListState> {
             />
           </div>
         </Card>
+        {allocatePermissionModalVisible && Object.keys(allocatePermissionRecord).length > 0 ? (
+          <AllocationPermission
+            onClose={this.onClose}
+            allocatePermissionModalVisible={allocatePermissionModalVisible}
+            allocatePermissionRecord={allocatePermissionRecord}
+          />
+        ) : null}
       </PageHeaderWrapper>
     );
   }
