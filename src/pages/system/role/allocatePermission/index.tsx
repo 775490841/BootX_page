@@ -38,6 +38,7 @@ interface CreateFromState {
     buttonList: string[];
     interfaceList: string[];
     dataList: string[];
+    menuList: number[];
   };
 }
 
@@ -50,6 +51,7 @@ class AllocationPermission extends Component<CreateFromProps, CreateFromState> {
       buttonList: [],
       interfaceList: [],
       dataList: [],
+      menuList: [],
     },
   };
 
@@ -60,14 +62,19 @@ class AllocationPermission extends Component<CreateFromProps, CreateFromState> {
       payload: {
         roleId: allocatePermissionRecord.id,
       },
-      callback: (response: { menuTree: MenuTree[]; permissionIds: string[] }) => {
-        const { menuTree = [], permissionIds = [] } = response;
+      callback: (response: {
+        menuTree: MenuTree[];
+        permissionIds: string[];
+        menuList: number[];
+      }) => {
+        const { menuTree = [], permissionIds = [], menuList = [] } = response;
         this.setState({
           menuTree,
           permissionList: {
             buttonList: permissionIds,
             interfaceList: permissionIds,
             dataList: permissionIds,
+            menuList,
           },
         });
       },
@@ -122,6 +129,19 @@ class AllocationPermission extends Component<CreateFromProps, CreateFromState> {
     });
   };
 
+  renderTree1 = (menuTree: MenuTree[]) => {
+    return menuTree.map((item) => {
+      if (item.children && item.children.length > 0) {
+        return (
+          <Tree.TreeNode key={item.id} title={item.name}>
+            {this.renderTree1(item.children)}
+          </Tree.TreeNode>
+        );
+      }
+      return <Tree.TreeNode key={item.id} title={item.name} />;
+    });
+  };
+
   onCheck = (type: string, checkedKeys: any[]) => {
     const { permissionList } = this.state;
     const newPermissionList = { ...permissionList };
@@ -161,7 +181,7 @@ class AllocationPermission extends Component<CreateFromProps, CreateFromState> {
     } = this.props;
     const {
       menuTree,
-      permissionList: { buttonList = [], dataList = [], interfaceList = [] },
+      permissionList: { buttonList = [], dataList = [], interfaceList = [], menuList },
     } = this.state;
     return (
       <Modal
@@ -176,6 +196,18 @@ class AllocationPermission extends Component<CreateFromProps, CreateFromState> {
         confirmLoading={submitting}
       >
         <Tabs>
+          <Tabs.TabPane tab="菜单权限" key="-1">
+            <Tree
+              checkedKeys={menuList}
+              showIcon
+              showLine
+              checkable
+              multiple
+              onCheck={(checkedKeys: any[]) => this.onCheck('menuList', checkedKeys)}
+            >
+              {this.renderTree1(menuTree)}
+            </Tree>
+          </Tabs.TabPane>
           <Tabs.TabPane tab="按钮权限" key="0">
             <Tree
               checkedKeys={buttonList}
