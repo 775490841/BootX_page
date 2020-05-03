@@ -165,6 +165,9 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
             >
               <Input />
             </FormItem>
+            <FormItem {...formItemLayout} label="组件" name="component">
+              <Input />
+            </FormItem>
             <FormItem
               {...formItemLayout}
               label="打开方式"
