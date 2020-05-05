@@ -1,9 +1,12 @@
-import { Button, Card, Divider, message } from 'antd';
+import { Card, message } from 'antd';
 import React, { Component, Fragment } from 'react';
+
+import { DeleteOutlined } from '@ant-design/icons';
 
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import { Link, Dispatch, AnyAction } from 'umi';
+import { Dispatch, AnyAction } from 'umi';
+import MyAuthorized from '@/pages/MyAuthorized';
 import { StateType } from './model';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
 import { TableListItem } from './data';
@@ -45,17 +48,31 @@ class TableList extends Component<TableListProps> {
           {record.isInstalled ? (
             <Fragment>
               {record.settingUrl && (
-                <Link to={`/system/storagePlugin/${record.settingUrl}`}>配置</Link>
+                <MyAuthorized
+                  authorizedType="link"
+                  authority={['/system/setting/view']}
+                  url={`/system/storagePlugin/${record.settingUrl}`}
+                  title="配置"
+                  divider
+                />
               )}
               {record.uninstallUrl && (
-                <Fragment>
-                  <Divider type="vertical" />
-                  <a onClick={() => this.uninstall(record.uninstallUrl)}>卸载</a>
-                </Fragment>
+                <MyAuthorized
+                  authorizedType="a"
+                  authority={['/system/storagePlugin/uninstall']}
+                  onClick={() => this.uninstall(record.uninstallUrl)}
+                  title="卸载"
+                  divider
+                />
               )}
             </Fragment>
           ) : (
-            <>{record.installUrl && <a onClick={() => this.install(record.installUrl)}>安装</a>}</>
+            <MyAuthorized
+              authorizedType="a"
+              authority={['/system/storagePlugin/install']}
+              onClick={() => this.install(record.installUrl)}
+              title="安装"
+            />
           )}
         </Fragment>
       ),
@@ -122,15 +139,16 @@ class TableList extends Component<TableListProps> {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button
-                icon="reload"
+              <MyAuthorized
+                authorizedType="button"
+                authority={['/system/setting/view']}
+                title="刷新"
+                icon={<DeleteOutlined />}
                 disabled={loading}
                 loading={loading}
                 type="primary"
                 onClick={() => this.componentDidMount()}
-              >
-                刷新
-              </Button>
+              />
             </div>
             <StandardTable
               bordered
