@@ -45,10 +45,23 @@ class TableList extends Component<TableListProps, TableListState> {
       dataIndex: 'name',
     },
     {
+      title: '类型',
+      dataIndex: 'type',
+      render: (text) => {
+        if (text === 0) {
+          return '按钮';
+        }
+        if (text === 1) {
+          return '接口';
+        }
+        return text;
+      },
+    },
+    {
       title: '路由/编号',
       dataIndex: 'urls',
       render: (text) => {
-        return text.map((item: string, index: number) => (
+        return text.map((item: string) => (
           <div
             style={{
               background: '#fafafa',
@@ -57,7 +70,7 @@ class TableList extends Component<TableListProps, TableListState> {
               paddingLeft: 4,
               borderRadius: 2,
             }}
-            key={index}
+            key={`${item}`}
           >
             {item}
           </div>
@@ -68,7 +81,12 @@ class TableList extends Component<TableListProps, TableListState> {
       title: '状态',
       dataIndex: 'isEnabled',
       width: 60,
-      render: (text) => (text ? <Tag color="#108ee9">启用</Tag> : <Tag color="#f50">禁用</Tag>),
+      render: (text, record) => (
+        <>
+          {text ? <Tag color="#108ee9">启用</Tag> : <Tag color="#f50">禁用</Tag>}
+          {record.isChecked ? <Tag color="#108ee9">校验</Tag> : <Tag color="#f50">不校验</Tag>}
+        </>
+      ),
     },
     {
       title: '创建时间',
