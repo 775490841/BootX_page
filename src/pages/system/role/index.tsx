@@ -15,13 +15,13 @@ import moment from 'moment';
 import { FormInstance } from 'antd/lib/form';
 import { getSiteInfo } from '@/utils/common';
 import { history } from '@@/core/history';
+import AllocationPermission from '@/pages/system/role/allocatePermission';
 import { StateType } from './model';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
 
 import { TableListItem } from './data.d';
 
 import styles from './style.less';
-import AllocationPermission from '@/pages/system/role/allocatePermission';
 
 const FormItem = Form.Item;
 

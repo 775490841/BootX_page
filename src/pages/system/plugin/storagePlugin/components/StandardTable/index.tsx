@@ -31,7 +31,7 @@ const StandardTable: React.FC<StandardTableProps<TableListItem>, StandardTableSt
         <Alert
           message={
             <Fragment>
-              共 <a style={{ fontWeight: 600 }}>{data.length}</a> 项&nbsp;&nbsp;
+              共 <a style={{ fontWeight: 600 }}>{data?.length}</a> 项&nbsp;&nbsp;
             </Fragment>
           }
           type="info"

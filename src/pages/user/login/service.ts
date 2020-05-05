@@ -1,19 +1,22 @@
-import request from 'umi-request';
+import request from '@/utils/request';
+import constants from '@/utils/constants';
+import { stringify } from 'qs';
 
 export interface LoginParamsType {
-  userName: string;
+  username: string;
   password: string;
   mobile: string;
   captcha: string;
+  captchaToken: string;
 }
 
 export async function fakeAccountLogin(params: LoginParamsType) {
-  return request('/api/login/account', {
+  return request(`${constants.baseUrl}/login`, {
     method: 'POST',
     data: params,
   });
 }
 
-export async function getFakeCaptcha(mobile: string) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
+export async function getFakeCaptcha(params: { [key: string]: string }) {
+  return request(`${constants.baseUrl}/captcha/image?${stringify(params)}`);
 }

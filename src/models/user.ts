@@ -1,8 +1,12 @@
 import { Effect, Reducer } from 'umi';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { queryCurrent, query as queryUsers, menu } from '@/services/user';
 
 export interface CurrentUser {
+  id?: number;
+  username?: string;
+  departmentName?: string;
+  roleNames?: string[];
   avatar?: string;
   name?: string;
   title?: string;
@@ -26,6 +30,7 @@ export interface UserModelType {
   effects: {
     fetch: Effect;
     fetchCurrent: Effect;
+    menu: Effect;
   };
   reducers: {
     saveCurrentUser: Reducer<UserModelState>;
@@ -54,6 +59,12 @@ const UserModel: UserModelType = {
         type: 'saveCurrentUser',
         payload: response,
       });
+    },
+    *menu({ callback }, { call }) {
+      const response = yield call(menu);
+      if (callback) {
+        callback(response);
+      }
     },
   },
 
