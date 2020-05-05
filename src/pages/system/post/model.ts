@@ -1,9 +1,9 @@
 import { AnyAction, Reducer } from 'umi';
 import { EffectsCommandMap } from 'dva';
+import { TableListData } from '@/pages/system/post/data';
 import { list, save, tree, edit, remove } from './service';
 
 import { TableListItem } from './data.d';
-import { TableListData } from '@/pages/system/post/data';
 
 export interface StateType {
   data?: TableListData;
