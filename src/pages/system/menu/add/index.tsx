@@ -165,6 +165,19 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
             >
               <Input />
             </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="菜单Key"
+              name="menuKey"
+              rules={[
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ]}
+            >
+              <Input />
+            </FormItem>
             <FormItem {...formItemLayout} label="组件" name="component">
               <Input />
             </FormItem>
