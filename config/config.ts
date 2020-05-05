@@ -5,6 +5,7 @@ import proxy from './proxy';
 import webpackPlugin from './plugin.config';
 const { winPath } = utils; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+import systeMenus from './menus/system';
 
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV, GA_KEY } = process.env;
 export default defineConfig({
@@ -61,207 +62,28 @@ export default defineConfig({
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
           routes: [
+            systeMenus,
             {
-              name: 'system',
-              path: '/system',
+              name: 'code',
+              icon: 'code',
+              path: '/code',
               routes: [
                 {
-                  name: 'storagePlugin',
-                  path: '/system/storagePlugin',
+                  name: 'column',
+                  icon: 'column',
+                  path: '/code/column/add',
                   routes: [
                     {
-                      path: '/system/storagePlugin',
-                      component: './system/plugin/storagePlugin',
-                    },
-                    {
-                      path: '/system/storagePlugin/ftp_storage/setting',
-                      name: 'ftpStorage',
-                      hideInMenu: true,
-                      component: './system/plugin/storagePlugin/ftpStorage',
-                    },
-                    {
-                      path: '/system/storagePlugin/local_storage/setting',
-                      name: 'localStorage',
-                      hideInMenu: true,
-                      component: './system/plugin/storagePlugin/localStorage',
-                    },
-                    {
-                      path: '/system/storagePlugin/oss_storage/setting',
-                      name: 'ossStorage',
-                      hideInMenu: true,
-                      component: './system/plugin/storagePlugin/ossStorage',
-                    },
-                  ],
-                },
-                {
-                  name: 'setting',
-                  icon: 'setting',
-                  path: '/system/setting',
-                  component: './system/setting',
-                },
-
-                {
-                  name: 'admin',
-                  path: '/system/admin',
-                  routes: [
-                    {
-                      path: '/system/admin',
-                      component: './system/admin',
-                    },
-                    {
-                      path: '/system/admin/add',
-                      name: 'add',
-                      hideInMenu: true,
-                      component: './system/admin/add',
-                    },
-                    {
-                      path: '/system/admin/edit/:id',
-                      name: 'edit',
-                      hideInMenu: true,
-                      component: './system/admin/add',
-                    },
-                  ],
-                },
-                {
-                  name: 'department',
-                  path: '/system/department',
-                  routes: [
-                    {
-                      path: '/system/department',
-                      component: './system/department',
-                    },
-                    {
-                      path: '/system/department/add',
-                      name: 'add',
-                      hideInMenu: true,
-                      component: './system/department/add',
-                    },
-                    {
-                      path: '/system/department/edit/:id',
-                      name: 'edit',
-                      hideInMenu: true,
-                      component: './system/department/add',
-                    },
-                  ],
-                },
-
-                {
-                  name: 'menu',
-                  path: '/system/menu',
-                  routes: [
-                    {
-                      path: '/system/menu',
-                      component: './system/menu',
-                    },
-                    {
-                      path: '/system/menu/add',
-                      name: 'add',
-                      hideInMenu: true,
-                      component: './system/menu/add',
-                    },
-                    {
-                      path: '/system/menu/edit/:id',
-                      name: 'edit',
-                      hideInMenu: true,
-                      component: './system/menu/add',
-                    },
-                  ],
-                },
-                {
-                  name: 'permission',
-                  path: '/system/permission',
-                  routes: [
-                    {
-                      path: '/system/permission',
-                      component: './system/permission',
-                    },
-                    {
-                      path: '/system/permission/add',
-                      name: 'add',
-                      hideInMenu: true,
-                      component: './system/permission/add',
-                    },
-                    {
-                      path: '/system/permission/edit/:id',
-                      name: 'edit',
-                      hideInMenu: true,
-                      component: './system/permission/add',
-                    },
-                  ],
-                },
-                {
-                  name: 'role',
-                  path: '/system/role',
-                  routes: [
-                    {
-                      path: '/system/role',
-                      component: './system/role',
-                    },
-                    {
-                      path: '/system/role/add',
-                      name: 'add',
-                      hideInMenu: true,
-                      component: './system/role/add',
-                    },
-                    {
-                      path: '/system/role/edit/:id',
-                      name: 'edit',
-                      hideInMenu: true,
-                      component: './system/role/add',
-                    },
-                  ],
-                },
-                {
-                  name: 'word',
-                  path: '/system/word',
-                  routes: [
-                    {
-                      path: '/system/word',
-                      component: './system/word',
-                    },
-                    {
-                      path: '/system/word/add',
-                      name: 'add',
-                      hideInMenu: true,
-                      component: './system/word/add',
-                    },
-                    {
-                      path: '/system/word/edit/:id',
-                      name: 'edit',
-                      hideInMenu: true,
-                      component: './system/word/add',
-                    },
-                  ],
-                },
-                {
-                  name: 'wordType',
-                  path: '/system/wordType',
-                  routes: [
-                    {
-                      path: '/system/wordType',
-                      component: './system/wordType',
-                    },
-                    {
-                      path: '/system/wordType/add',
-                      name: 'add',
-                      hideInMenu: true,
-                      component: './system/wordType/add',
-                    },
-                    {
-                      path: '/system/wordType/edit/:id',
-                      name: 'edit',
-                      hideInMenu: true,
-                      component: './system/wordType/add',
+                      path: '/code/column/add',
+                      component: './code/column/add',
                     },
                   ],
                 },
               ],
             },
             {
-              name: 'index',
-              icon: 'dashboard',
               path: '/index',
-              component: './dashboard/analysis',
+              component: './index',
             },
             {
               path: '/',
