@@ -4,6 +4,8 @@
 export interface TableListItem {
   id?: number;
   isEnabled?: boolean;
+  isChecked?: boolean;
+  type?: number;
   name?: string;
   memo?: string;
   urls?: string[];
@@ -43,6 +45,7 @@ export interface TableListParams {
   status: string;
   name: string;
   current: number;
+  type: number;
   currentPage: number;
   pageNumber: number;
   orderProperty: string;
