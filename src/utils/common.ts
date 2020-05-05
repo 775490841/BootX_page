@@ -1,4 +1,6 @@
 // UUID
+import moment from 'moment';
+
 const uuidChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
 export const uuid = () => {
   let r;
@@ -30,4 +32,29 @@ export function getSiteInfo(key?: string) {
     return JSON.parse(settingStr || '{}')[`${key}`];
   }
   return JSON.parse(settingStr || '{}');
+}
+
+export function parseFormValues(values: { [key: string]: any }) {
+  const result = {
+    ...values,
+  };
+  if (result.rangeDate) {
+    if (values.rangeDate[0]) {
+      result.beginDate = moment(values.rangeDate[0]).format('YYYY-MM-DD 00:00:00');
+    }
+    if (values.rangeDate[1]) {
+      result.endDate = moment(values.rangeDate[1]).format('YYYY-MM-DD 23:59:59');
+    }
+  }
+  if (result.rangeDate1) {
+    if (values.rangeDate1[0]) {
+      result.beginDate1 = moment(values.rangeDate1[0]).format('YYYY-MM-DD 00:00:00');
+    }
+    if (result.rangeDate[1]) {
+      result.endDate1 = moment(values.rangeDate1[1]).format('YYYY-MM-DD 23:59:59');
+    }
+  }
+  delete result.rangeDate;
+  delete result.rangeDate1;
+  return result;
 }
