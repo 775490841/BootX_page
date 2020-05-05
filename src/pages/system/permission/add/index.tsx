@@ -129,6 +129,7 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
             initialValues={{
               isEnabled: true,
               type: '0',
+              isChecked: true,
             }}
           >
             <FormItem name="id" style={{ display: 'none' }}>
@@ -199,9 +200,16 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
               <FormItem
                 name="isEnabled"
                 valuePropName="checked"
-                style={{ display: 'inline-block', width: 'calc(33% - 8px)' }}
+                style={{ display: 'inline-block', width: 'calc(20% - 8px)' }}
               >
                 <Checkbox>启用</Checkbox>
+              </FormItem>
+              <FormItem
+                name="isChecked"
+                valuePropName="checked"
+                style={{ display: 'inline-block', width: 'calc(20% - 8px)' }}
+              >
+                <Checkbox>校验</Checkbox>
               </FormItem>
             </FormItem>
 
