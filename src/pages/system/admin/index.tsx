@@ -1,5 +1,10 @@
-import { Button, Card, Col, Form, Input, Row, message, Tag, Modal, Select, Divider } from 'antd';
-import { PlusOutlined, ReloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Form, Input, Row, message, Tag, Modal, Select, DatePicker } from 'antd';
+import {
+  PlusOutlined,
+  ReloadOutlined,
+  ExclamationCircleOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
 import React, { Component, Fragment } from 'react';
 
 import { Dispatch } from 'umi';
@@ -7,8 +12,9 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
 import { FormInstance } from 'antd/lib/form';
-import { getSiteInfo } from '@/utils/common';
+import { getSiteInfo, parseFormValues } from '@/utils/common';
 import { history } from '@@/core/history';
+import MyAuthorized from '@/pages/MyAuthorized';
 import { StateType } from './model';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
 
@@ -60,6 +66,10 @@ class TableList extends Component<TableListProps, TableListState> {
       width: 110,
     },
     {
+      title: '部门',
+      dataIndex: 'departmentName',
+    },
+    {
       title: '状态',
       dataIndex: 'isEnabled',
       width: 60,
@@ -77,11 +87,28 @@ class TableList extends Component<TableListProps, TableListState> {
       width: 220,
       render: (text, record: TableListItem) => (
         <Fragment>
-          <a onClick={() => history.push(`/system/admin/edit/${record.id}`)}>编辑</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.update(record, 'remove')}>删除</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.update(record, 'reset')}>重置密码</a>
+          <MyAuthorized
+            authorizedType="a"
+            authority={['/system/admin/edit', '/system/admin/update']}
+            onClick={() => history.push(`/system/admin/edit/${record.id}`)}
+            title="编辑"
+            divider
+          />
+
+          <MyAuthorized
+            authorizedType="a"
+            authority={['/system/admin/delete']}
+            onClick={() => this.update(record, 'remove')}
+            title="删除"
+            divider
+          />
+
+          <MyAuthorized
+            authorizedType="a"
+            authority={['/system/admin/resetPwd']}
+            onClick={() => this.update(record, 'reset')}
+            title="重置密码"
+          />
         </Fragment>
       ),
     },
@@ -106,6 +133,19 @@ class TableList extends Component<TableListProps, TableListState> {
 
   update = (record: TableListItem, type1: string, content1?: string) => {
     const root = this;
+    let ids: number[] = [];
+    if (!record.id) {
+      const { selectedRows } = this.state;
+      ids = [...selectedRows.map((item) => item.id)];
+    } else {
+      ids = [record.id];
+    }
+    if (ids.length === 0) {
+      message.destroy();
+      message.warn('请选择要操作的数据');
+      return;
+    }
+
     const content2 = () => {
       if (type1 === 'remove') {
         return '您正在执行账号删除操作';
@@ -132,7 +172,7 @@ class TableList extends Component<TableListProps, TableListState> {
         dispatch({
           type: `admin/${type1}`,
           payload: {
-            id: record.id,
+            ids,
           },
           callback: (response: { type: string; content: string }) => {
             const { type, content } = response;
@@ -156,7 +196,7 @@ class TableList extends Component<TableListProps, TableListState> {
 
   handleSearch = (values: { [key: string]: any }) => {
     this.list({
-      ...values,
+      ...parseFormValues(values),
     });
   };
 
@@ -181,6 +221,11 @@ class TableList extends Component<TableListProps, TableListState> {
                 <Select.Option value="true">启用</Select.Option>
                 <Select.Option value="false">禁用</Select.Option>
               </Select>
+            </FormItem>
+          </Col>
+          <Col md={8}>
+            <FormItem label="添加时间" name="rangeDate">
+              <DatePicker.RangePicker separator="~" />
             </FormItem>
           </Col>
           <Col md={2}>
@@ -225,6 +270,15 @@ class TableList extends Component<TableListProps, TableListState> {
               >
                 刷新
               </Button>
+              <MyAuthorized
+                authorizedType="button"
+                type="danger"
+                authority={['/system/admin/delete']}
+                title="删除"
+                disabled={selectedRows.length === 0}
+                icon={<DeleteOutlined />}
+                onClick={() => this.update({}, 'remove')}
+              />
             </div>
             <StandardTable
               bordered
