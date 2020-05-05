@@ -67,6 +67,9 @@ export default {
   'menu.system.permission': '系统权限',
   'menu.system.permission.add': '添加',
   'menu.system.permission.edit': '修改',
+  'menu.system.post': '岗位管理',
+  'menu.system.post.add': '添加',
+  'menu.system.post.edit': '修改',
 
   'menu.system.wordType': '字典分类',
   'menu.system.wordType.add': '添加',
