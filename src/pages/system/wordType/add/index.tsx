@@ -93,7 +93,7 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label="分类名称"
+              label="分类名"
               name="name"
               rules={[
                 {
@@ -104,7 +104,7 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
             >
               <Input />
             </FormItem>
-            <FormItem {...formItemLayout} label="备注" name="description">
+            <FormItem {...formItemLayout} label="描述" name="description">
               <Input.TextArea autoSize={{ minRows: 4, maxRows: 4 }} />
             </FormItem>
             <FormItem {...formItemLayout} label="设置" style={{ marginBottom: 0 }}>

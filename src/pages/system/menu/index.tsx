@@ -1,17 +1,4 @@
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  Row,
-  message,
-  Tag,
-  Modal,
-  Select,
-  Divider,
-  Tree,
-} from 'antd';
+import { Button, Card, Col, Row, message, Tag, Modal, Divider, Tree } from 'antd';
 import { PlusOutlined, ReloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { Component, Fragment } from 'react';
 
@@ -19,7 +6,6 @@ import { Dispatch } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
-import { FormInstance } from 'antd/lib/form';
 import { getSiteInfo } from '@/utils/common';
 import { history } from '@@/core/history';
 import { StateType } from './model';
@@ -28,8 +14,6 @@ import StandardTable, { StandardTableColumnProps } from './components/StandardTa
 import { MenuTree, TableListItem } from './data.d';
 
 import styles from './style.less';
-
-const FormItem = Form.Item;
 
 interface TableListProps {
   dispatch: Dispatch<any>;
@@ -45,8 +29,6 @@ interface TableListState {
 }
 
 class TableList extends Component<TableListProps, TableListState> {
-  searchForm = React.createRef(FormInstance);
-
   state: TableListState = {
     selectedRows: [],
     menuTree: [],
@@ -177,12 +159,6 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
-  handleSearch = (values: { [key: string]: any }) => {
-    this.list({
-      ...values,
-    });
-  };
-
   renderTree = (menuTree: MenuTree[]) => {
     return menuTree.map((item) => {
       if (item.children && item.children.length > 0) {
@@ -215,41 +191,6 @@ class TableList extends Component<TableListProps, TableListState> {
     }
   };
 
-  renderSimpleForm = () => {
-    return (
-      <Form ref={this.searchForm} onFinish={this.handleSearch}>
-        <Row gutter={16}>
-          <Col md={5}>
-            <FormItem label="姓名" name="name">
-              <Input placeholder="请输入" />
-            </FormItem>
-          </Col>
-          <Col md={5}>
-            <FormItem label="手机号" name="mobile">
-              <Input placeholder="请输入" />
-            </FormItem>
-          </Col>
-          <Col md={4}>
-            <FormItem label="状态" name="isEnabled">
-              <Select>
-                <Select.Option value="">全部</Select.Option>
-                <Select.Option value="true">启用</Select.Option>
-                <Select.Option value="false">禁用</Select.Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col md={2}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
-            </span>
-          </Col>
-        </Row>
-      </Form>
-    );
-  };
-
   render() {
     const {
       menu: { data },
@@ -277,7 +218,6 @@ class TableList extends Component<TableListProps, TableListState> {
                 title={tableTitle ? <h1>上级菜单：{tableTitle}</h1> : <h1>顶级菜单</h1>}
               >
                 <div className={styles.tableList}>
-                  <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
                   <div className={styles.tableListOperator}>
                     <Button
                       disabled={loading}

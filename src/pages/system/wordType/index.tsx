@@ -1,4 +1,17 @@
-import { Button, Card, Col, Form, Input, Row, message, Tag, Modal, Select, Divider } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  Row,
+  message,
+  Tag,
+  Modal,
+  Select,
+  Divider,
+  DatePicker,
+} from 'antd';
 import { PlusOutlined, ReloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { Component, Fragment } from 'react';
 
@@ -7,7 +20,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
 import { FormInstance } from 'antd/lib/form';
-import { getSiteInfo } from '@/utils/common';
+import { getSiteInfo, parseFormValues } from '@/utils/common';
 import { history } from '@@/core/history';
 import { StateType } from './model';
 import StandardTable, { StandardTableColumnProps } from './components/StandardTable';
@@ -37,7 +50,7 @@ class TableList extends Component<TableListProps, TableListState> {
 
   columns: StandardTableColumnProps[] = [
     {
-      title: '名称',
+      title: '分类名',
       dataIndex: 'name',
       width: 100,
     },
@@ -140,7 +153,7 @@ class TableList extends Component<TableListProps, TableListState> {
 
   handleSearch = (values: { [key: string]: any }) => {
     this.list({
-      ...values,
+      ...parseFormValues(values),
     });
   };
 
@@ -149,12 +162,7 @@ class TableList extends Component<TableListProps, TableListState> {
       <Form ref={this.searchForm} onFinish={this.handleSearch}>
         <Row gutter={16}>
           <Col md={5}>
-            <FormItem label="姓名" name="name">
-              <Input placeholder="请输入" />
-            </FormItem>
-          </Col>
-          <Col md={5}>
-            <FormItem label="手机号" name="mobile">
+            <FormItem label="分类名" name="name">
               <Input placeholder="请输入" />
             </FormItem>
           </Col>
@@ -165,6 +173,11 @@ class TableList extends Component<TableListProps, TableListState> {
                 <Select.Option value="true">启用</Select.Option>
                 <Select.Option value="false">禁用</Select.Option>
               </Select>
+            </FormItem>
+          </Col>
+          <Col md={8}>
+            <FormItem label="添加时间" name="rangeDate">
+              <DatePicker.RangePicker separator="~" />
             </FormItem>
           </Col>
           <Col md={2}>

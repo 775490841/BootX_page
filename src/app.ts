@@ -1,6 +1,5 @@
-import constants from '@/utils/constants';
-import { setSiteInfo } from '@/utils/common';
-import { message } from 'antd';
+import { getAuthRoutes, siteInfo } from '@/utils/common';
+
 import dynamic from 'dva/dynamic';
 
 let authRoutes = [];
@@ -35,39 +34,16 @@ export function patchRoutes({ routes }) {
   });
 }
 
+/**
+ * 该方法会在patchRoutes之前进行执行。
+ * @param oldRender
+ */
 export function render(oldRender: any) {
-  fetch(`${constants.baseUrl}/auth_routes`, {
-    headers: {
-      Authorization: localStorage.getItem('token'),
-    },
-    credentials: 'include',
-    method: 'POST',
-  })
-    .then((res) => {
-      if (res.status === 999) {
-        message.error('获取菜单失败！！');
-        return {
-          menus: [],
-        };
-      }
-      return res.json();
-    })
-    .then(
-      (data: { [key: string]: any }) => {
-        authRoutes = data.menus;
-        oldRender();
-      },
-      () => oldRender(),
-    );
-
+  // 权限路由。
+  getAuthRoutes((data: { [key: string]: any }) => {
+    authRoutes = data.menus;
+    oldRender();
+  });
   // 系统配置信息
-  fetch(`${constants.baseUrl}/setting/edit`, {
-    method: 'POST',
-    headers: {
-      Authorization: localStorage.getItem('token'),
-    },
-    credentials: 'include',
-  })
-    .then((res) => res.json())
-    .then((data) => setSiteInfo(data));
+  siteInfo();
 }
