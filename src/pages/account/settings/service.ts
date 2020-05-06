@@ -1,7 +1,8 @@
-import request from 'umi-request';
+import request from '@/utils/request';
+import constants from '@/utils/constants';
 
 export async function queryCurrent() {
-  return request('/api/currentUser');
+  return request(`${constants.baseUrl}/currentUser`);
 }
 
 export async function queryProvince() {
