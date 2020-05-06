@@ -5,7 +5,7 @@ import proxy from './proxy';
 import webpackPlugin from './plugin.config';
 const { winPath } = utils; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
-import systeMenus from './menus/system';
+// import systeMenus from './menus/system';
 
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV, GA_KEY } = process.env;
 export default defineConfig({
@@ -62,25 +62,6 @@ export default defineConfig({
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
           routes: [
-            systeMenus,
-            {
-              name: 'code',
-              icon: 'code',
-              path: '/code',
-              routes: [
-                {
-                  name: 'column',
-                  icon: 'column',
-                  path: '/code/column/add',
-                  routes: [
-                    {
-                      path: '/code/column/add',
-                      component: './code/column/add',
-                    },
-                  ],
-                },
-              ],
-            },
             {
               path: '/index',
               component: './index',

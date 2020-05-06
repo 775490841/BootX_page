@@ -88,7 +88,11 @@ class Login extends Component<LoginProps, LoginState> {
             <Row gutter={8}>
               <Col span={16}>
                 <Form.Item name="captcha">
-                  <Input size="large" prefix={<MailOutlined />} />
+                  <Input
+                    size="large"
+                    style={{ textTransform: 'uppercase' }}
+                    prefix={<MailOutlined />}
+                  />
                 </Form.Item>
               </Col>
               <Col span={8}>

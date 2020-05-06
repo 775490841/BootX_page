@@ -8,15 +8,15 @@ function buildRoutes(authRoutes1) {
   return (authRoutes1 || []).map((item) => {
     if (item.children && item.children.length > 0) {
       return {
-        path: item.url,
+        path: item.path,
         name: item.menuKey,
         routes: buildRoutes(item.children),
       };
     }
     return {
-      path: item.url,
+      path: item.path,
       name: item.menuKey,
-      component: dynamic({ component: () => import(`@/pages${item.component}`) }),
+      component: dynamic({ component: () => import(`@/pages${item.component || item.url}`) }),
     };
   });
 }
@@ -26,9 +26,10 @@ function buildRoutes(authRoutes1) {
  * @param routes
  */
 export function patchRoutes({ routes }) {
+  console.log('denglu11111');
   // 清空左侧路由
-  // routes[0].routes[1].routes.splice(0,100);
-
+  routes[0].routes[1].routes.splice(0, 100);
+  console.log('aa', buildRoutes(authRoutes));
   buildRoutes(authRoutes).forEach((item) => {
     routes[0].routes[1].routes.push(item);
   });
@@ -39,6 +40,7 @@ export function patchRoutes({ routes }) {
  * @param oldRender
  */
 export function render(oldRender: any) {
+  console.log('denglu222222222');
   // 权限路由。
   getAuthRoutes((data: { [key: string]: any }) => {
     authRoutes = data.menus;
