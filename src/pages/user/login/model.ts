@@ -6,6 +6,7 @@ import { getPageQuery, setAuthority } from './utils/utils';
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
+  content?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
 }
 
@@ -29,7 +30,7 @@ const Model: ModelType = {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ payload, callback }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
@@ -38,6 +39,7 @@ const Model: ModelType = {
       // Login successfully
       if (response.status === 'ok') {
         message.success('登录成功！');
+        localStorage.setItem('token', response.token);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -54,6 +56,10 @@ const Model: ModelType = {
           }
         }
         history.replace(redirect || '/');
+      }
+
+      if (callback) {
+        callback(response);
       }
     },
 
@@ -72,6 +78,7 @@ const Model: ModelType = {
         ...state,
         status: payload.status,
         type: payload.type,
+        content: payload.content,
       };
     },
   },

@@ -1,13 +1,11 @@
-import { Alert } from 'antd';
+import { Alert, Form, Input, Button, Row, Col } from 'antd';
+import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import React, { Component } from 'react';
 import { Dispatch, AnyAction, connect } from 'umi';
 import { uuid } from '@/utils/common';
 import { StateType } from './model';
 import styles from './style.less';
-import { LoginParamsType } from './service';
-import LoginFrom from './components/Login';
-
-const { Tab, UserName, Password, Captcha, Submit } = LoginFrom;
+import constants from '@/utils/constants';
 
 interface LoginProps {
   dispatch: Dispatch<AnyAction>;
@@ -15,16 +13,15 @@ interface LoginProps {
   submitting?: boolean;
 }
 
-interface LoginState {
-  type: string;
-}
-
 const LoginMessage: React.FC<{
   content: string;
 }> = ({ content }) => (
   <Alert
     style={{
-      marginBottom: 24,
+      marginBottom: 16,
+      width: '80%',
+      margin: '0 auto',
+      marginTop: 16,
     }}
     message={content}
     type="error"
@@ -32,78 +29,85 @@ const LoginMessage: React.FC<{
   />
 );
 
+interface LoginState {
+  captchaId: string;
+}
+
 class Login extends Component<LoginProps, LoginState> {
-  state = {
-    type: 'account',
+  state: LoginState = {
+    captchaId: uuid(),
   };
 
-  componentDidMount(): void {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'userAndlogin/getCaptcha',
-      payload: {
-        captchaId: uuid(),
-      },
-    });
-  }
+  componentDidMount(): void {}
 
-  handleSubmit = (values: LoginParamsType) => {
+  onFinish = (values) => {
+    const { captchaId } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'userAndlogin/login',
       payload: {
         ...values,
+        captchaId,
         type: 'account',
+      },
+      callback: (response: { code: string }) => {
+        const { code } = response;
+        if (code === '-2') {
+          this.setState({
+            captchaId: uuid(),
+          });
+        }
       },
     });
   };
 
   render() {
     const { userAndlogin, submitting } = this.props;
-    const { status, type: loginType } = userAndlogin;
-    const { type } = this.state;
+    const { status, type: loginType, content } = userAndlogin;
+    const { captchaId } = this.state;
     return (
       <div className={styles.main}>
-        <LoginFrom activeKey={type} onSubmit={this.handleSubmit}>
-          <Tab key="account" tab="账户密码登录">
-            {status === 'error' && loginType === 'account' && !submitting && (
-              <LoginMessage content="账户或密码错误" />
-            )}
+        {status === 'error' && loginType === 'account' && !submitting && (
+          <LoginMessage content={content} />
+        )}
 
-            <UserName
-              name="username"
-              rules={[
-                {
-                  required: true,
-                  message: '请输入用户名!',
-                },
-              ]}
-            />
-            <Password
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: '请输入密码！',
-                },
-              ]}
-            />
-            <Captcha
-              name="captcha"
-              placeholder="验证码"
-              countDown={120}
-              getCaptchaButtonText=""
-              getCaptchaSecondText="秒"
-              rules={[
-                {
-                  required: true,
-                  message: '请输入验证码！',
-                },
-              ]}
-            />
-          </Tab>
-          <Submit loading={submitting}>登录</Submit>
-        </LoginFrom>
+        <Form
+          name="normal_login"
+          className={styles.loginForm}
+          initialValues={{ remember: true }}
+          onFinish={this.onFinish}
+        >
+          <Form.Item name="username" rules={[{ required: true, message: '请输入用户名!' }]}>
+            <Input size="large" prefix={<UserOutlined />} />
+          </Form.Item>
+          <Form.Item name="password" rules={[{ required: true, message: '请输入密码!' }]}>
+            <Input size="large" prefix={<LockOutlined />} type="password" />
+          </Form.Item>
+
+          <Form.Item>
+            <Row gutter={8}>
+              <Col span={16}>
+                <Form.Item name="captcha">
+                  <Input size="large" prefix={<MailOutlined />} />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <img
+                  style={{ cursor: 'pointer' }}
+                  src={`${constants.baseUrl}/captcha/image?captchaId=${captchaId}`}
+                  alt="换一个"
+                  onClick={() => this.setState({ captchaId: uuid() })}
+                />
+              </Col>
+            </Row>
+          </Form.Item>
+
+          <Form.Item>
+            <Button size="large" type="primary" htmlType="submit" block>
+              登录
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     );
   }
