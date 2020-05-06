@@ -1,5 +1,7 @@
 // UUID
 import moment from 'moment';
+import request from '@/utils/request';
+import constants from '@/utils/constants';
 
 const uuidChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
 export const uuid = () => {
@@ -21,9 +23,12 @@ export const uuid = () => {
   return uuid.join('');
 };
 
-export function setSiteInfo(siteInfo: { setting: {} }) {
-  const { setting = {} } = siteInfo;
-  localStorage.setItem('setting', JSON.stringify(setting || {}));
+export function siteInfo() {
+  request(`${constants.baseUrl}/setting/edit`, {
+    method: 'POST',
+  }).then((data) => {
+    localStorage.setItem('setting', JSON.stringify(data || {}));
+  });
 }
 
 export function getSiteInfo(key?: string) {
@@ -32,6 +37,14 @@ export function getSiteInfo(key?: string) {
     return JSON.parse(settingStr || '{}')[`${key}`];
   }
   return JSON.parse(settingStr || '{}');
+}
+
+export function getAuthRoutes(callback?: any) {
+  request(`${constants.baseUrl}/auth_routes`, {
+    method: 'POST',
+  }).then((data: { [key: string]: any }) => {
+    callback(data);
+  });
 }
 
 export function parseFormValues(values: { [key: string]: any }) {
