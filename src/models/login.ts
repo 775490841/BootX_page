@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import { history, Reducer, Effect } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { fakeAccountLogin, logout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
@@ -58,10 +58,12 @@ const Model: LoginModelType = {
       }
     },
 
-    logout() {
+    *logout({ payload }, { call }) {
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
+        yield call(logout, payload);
+        localStorage.removeItem('token');
         history.replace({
           pathname: '/user/login',
           search: stringify({

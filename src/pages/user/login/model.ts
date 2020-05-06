@@ -16,6 +16,7 @@ export interface ModelType {
   effects: {
     login: Effect;
     getCaptcha: Effect;
+    logout: Effect;
   };
   reducers: {
     changeLoginStatus: Reducer<StateType>;
