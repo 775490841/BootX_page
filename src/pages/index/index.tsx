@@ -23,9 +23,9 @@ export default (): React.ReactNode => (
     <Row gutter={16}>
       <Col span={16}>
         <Card style={{ marginTop: 16 }}>
-          <Collapse bordered={false}>
-            {msgs.map((item: { title: string; list: string[] }) => (
-              <Panel header={item.title} key={`${item.title}`}>
+          <Collapse bordered={false} defaultActiveKey={['0_001']}>
+            {msgs.map((item: { title: string; list: string[] }, index: number) => (
+              <Panel header={item.title} key={`${index}_001`}>
                 {item.list.map((info: string, no: number) => (
                   <p key={`${info}`}>
                     {no + 1}. {info}
@@ -38,9 +38,9 @@ export default (): React.ReactNode => (
       </Col>
       <Col span={8}>
         <Card title="发布日志" size="small" style={{ marginTop: 16 }}>
-          <Collapse bordered={false} accordion defaultActiveKey={[0]}>
-            {releases.map((item: { title: string; list: string[] }) => (
-              <Panel header={item.title} key={`${item.title}`}>
+          <Collapse bordered={false} accordion defaultActiveKey={['0_001']}>
+            {releases.map((item: { title: string; list: string[] }, index: number) => (
+              <Panel header={item.title} key={`${index}_001`}>
                 {item.list.map((info: string, no: number) => (
                   <p key={`${info}`}>
                     {no + 1}. {info}
