@@ -127,7 +127,7 @@ class CreateFrom extends Component<CreateFromProps> {
             <FormItem
               {...formItemLayout}
               label="项目描述"
-              name="cardNo"
+              name="memo"
               rules={[
                 {
                   required: true,
@@ -140,7 +140,7 @@ class CreateFrom extends Component<CreateFromProps> {
             <FormItem
               {...formItemLayout}
               label="项目包名"
-              name="name"
+              name="packageName"
               rules={[
                 {
                   required: true,
@@ -154,7 +154,7 @@ class CreateFrom extends Component<CreateFromProps> {
             <FormItem
               {...formItemLayout}
               label="表前缀"
-              name="tablePref"
+              name="tablePrefix"
               rules={[
                 {
                   required: true,
