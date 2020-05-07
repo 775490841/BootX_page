@@ -1,24 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import {
-  Form,
-  Input,
-  Checkbox,
-  message,
-  TreeSelect,
-  Card,
-  Button,
-  Divider,
-  Row,
-  Col,
-  Alert,
-  Select,
-} from 'antd';
+import { Form, Input, message, Card, Button, Alert, Select, Radio } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { Dispatch, history } from 'umi';
-import { DepartmentTree } from '@/pages/system/department/data';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { getSiteInfo } from '@/utils/common';
 import { TableListItem } from '../data';
 import { StateType } from '../model';
 
@@ -39,59 +24,17 @@ interface RoleList {
   name: string;
 }
 
-interface CreateFromState {
-  departmentTree: DepartmentTree[];
-  roleList: RoleList[];
-  readonly: boolean;
-}
-
-class CreateFrom extends Component<CreateFromProps, CreateFromState> {
+class CreateFrom extends Component<CreateFromProps> {
   formRef = React.createRef<FormInstance>();
-
-  state: CreateFromState = {
-    departmentTree: [],
-    roleList: [],
-    readonly: false,
-  };
 
   componentDidMount(): void {
     const {
       dispatch,
       match: { params = {} },
     } = this.props;
-    dispatch({
-      type: 'admin/departmentTree',
-      callback: (response: DepartmentTree[]) => {
-        this.setState({
-          departmentTree: response,
-        });
-      },
-    });
-    dispatch({
-      type: 'admin/roleList',
-      callback: (response: RoleList[]) => {
-        this.setState({
-          roleList: response,
-        });
-      },
-    });
     if (params && Object.keys(params).length > 0 && params.id) {
       dispatch({
         type: 'admin/edit',
-        payload: params,
-        callback: (response: TableListItem) => {
-          this.setState({
-            readonly: true,
-          });
-          const { current } = this.formRef;
-          if (current) {
-            current.setFieldsValue(response);
-          }
-        },
-      });
-    } else {
-      dispatch({
-        type: 'admin/add',
         payload: params,
         callback: (response: TableListItem) => {
           const { current } = this.formRef;
@@ -119,22 +62,8 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
     });
   };
 
-  renderTreeSelect = (treeSelect: DepartmentTree[]) => {
-    return treeSelect.map((item) => {
-      if (item.children && item.children.length > 0) {
-        return (
-          <TreeSelect.TreeNode value={item.id} key={item.id} title={item.name}>
-            {this.renderTreeSelect(item.children)}
-          </TreeSelect.TreeNode>
-        );
-      }
-      return <TreeSelect.TreeNode value={item.id} key={item.id} title={item.name} />;
-    });
-  };
-
   render() {
     const { submitting } = this.props;
-    const { departmentTree, roleList, readonly } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -155,171 +84,88 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
     return (
       <PageHeaderWrapper title={false}>
         <Card bordered={false}>
-          <Alert showIcon type="info" message={`默认密码是${getSiteInfo('defaultPassword')}`} />
+          <Alert
+            style={{ marginBottom: 24 }}
+            type="info"
+            showIcon
+            message="目前代码工具只支持自动生成Spring Boot和 Ant Design pro4 ts版"
+          />
           <Form
             ref={this.formRef}
             onFinish={this.onFinish}
             initialValues={{
-              isEnabled: true,
-              isLocked: false,
+              status: 0,
+              dataSourceType: 'mysql',
+              parentClass: 'BaseEntity',
             }}
           >
             <FormItem name="id" style={{ display: 'none' }}>
               <Input type="hidden" />
             </FormItem>
-            <Divider orientation="left" style={{ color: '#0189ff', fontWeight: 600 }}>
-              基础信息
-            </Divider>
-            <Row gutter={8}>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label="所属部门"
-                  name="departmentId"
-                  rules={[
-                    {
-                      required: true,
-                      message: '必填',
-                    },
-                  ]}
-                >
-                  <TreeSelect showSearch showArrow treeLine treeDefaultExpandAll>
-                    {this.renderTreeSelect(departmentTree)}
-                  </TreeSelect>
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label="用户名"
-                  name="username"
-                  help="设置完成之后，不能修改"
-                  rules={[
-                    {
-                      required: true,
-                      message: '必填',
-                    },
-                  ]}
-                >
-                  <Input readOnly={readonly} />
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={8}>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label="角色"
-                  name="roleIds"
-                  rules={[
-                    {
-                      required: true,
-                      message: '必填',
-                    },
-                  ]}
-                >
-                  <Select mode="multiple" showSearch showArrow>
-                    {roleList.map((item) => (
-                      <Select.Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label="员工编号"
-                  name="cardNo"
-                  rules={[
-                    {
-                      required: true,
-                      message: '必填',
-                    },
-                  ]}
-                  help="由系统生成，不能修改"
-                >
-                  <Input readOnly />
-                </FormItem>
-              </Col>
-            </Row>
-            <Divider orientation="left" style={{ color: '#0189ff', fontWeight: 600 }}>
-              详细信息
-            </Divider>
-            <Row gutter={8}>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label="姓名"
-                  name="name"
-                  rules={[
-                    {
-                      required: true,
-                      message: '必填',
-                    },
-                  ]}
-                >
-                  <Input />
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label="联系电话"
-                  name="mobile"
-                  rules={[
-                    {
-                      required: true,
-                      message: '必填',
-                    },
-                  ]}
-                >
-                  <Input />
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={8}>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label="邮箱"
-                  name="email"
-                  rules={[
-                    {
-                      required: true,
-                      message: '必填',
-                    },
-                  ]}
-                >
-                  <Input />
-                </FormItem>
-              </Col>
-              <Col span={12} />
-            </Row>
-            <Divider orientation="left" style={{ color: '#0189ff', fontWeight: 600 }}>
-              其他信息
-            </Divider>
-            <Row gutter={8}>
-              <Col span={12}>
-                <FormItem {...formItemLayout} label="设置" style={{ marginBottom: 0 }}>
-                  <FormItem
-                    name="isEnabled"
-                    valuePropName="checked"
-                    style={{ display: 'inline-block', width: 'calc(33% - 8px)' }}
-                  >
-                    <Checkbox>启用</Checkbox>
-                  </FormItem>
-                  <FormItem
-                    name="isLocked"
-                    valuePropName="checked"
-                    style={{ display: 'inline-block', width: 'calc(33% - 8px)' }}
-                  >
-                    <Checkbox>锁定</Checkbox>
-                  </FormItem>
-                </FormItem>
-              </Col>
-            </Row>
+            <FormItem
+              {...formItemLayout}
+              label="所属项目"
+              name="projectId"
+              help="设置完成之后，不能修改"
+              rules={[
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ]}
+            >
+              <Select>
+                <Select.Option value={1}>A 项目</Select.Option>
+                <Select.Option value={2}>B 项目</Select.Option>
+              </Select>
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="模块中文名"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ]}
+            >
+              <Input />
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="模块描述"
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ]}
+              help="系统根据描述来生成注释"
+            >
+              <Input />
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="模块英文名"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ]}
+              help="系统根据该名称生成表，表名称：表前缀_模块英文名"
+            >
+              <Input />
+            </FormItem>
+            <FormItem {...formItemLayout} label="父类" name="parentClass">
+              <Radio.Group>
+                <Radio value="BaseEntity">BaseEntity</Radio>
+                <Radio value="OrderedEntity">OrderedEntity</Radio>
+              </Radio.Group>
+            </FormItem>
             <FormItem {...submitFormLayout}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 保存
