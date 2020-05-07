@@ -61,19 +61,7 @@ export default defineConfig({
           path: '/',
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
-          routes: [
-            {
-              path: '/index',
-              component: './index',
-            },
-            {
-              path: '/',
-              redirect: '/index',
-            },
-            {
-              component: '404',
-            },
-          ],
+          routes: [],
         },
       ],
     },
