@@ -14,5 +14,7 @@ export async function fakeChartData() {
 }
 
 export async function queryCurrent() {
-  return request(`${constants.baseUrl}/currentUser`);
+  return request(`${constants.baseUrl}/currentUser`, {
+    method: 'POST',
+  });
 }
