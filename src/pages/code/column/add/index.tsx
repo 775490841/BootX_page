@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Checkbox, Card, Button, Select, Radio, Tooltip } from 'antd';
+import { Form, Input, Checkbox, Card, Button, Select, Radio, Tooltip, Alert } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { Dispatch } from 'umi';
@@ -31,6 +31,7 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
   };
 
   render() {
+    const { current } = this.formRef;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -51,6 +52,12 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
     return (
       <PageHeaderWrapper title={false}>
         <Card bordered={false}>
+          <Alert
+            style={{ marginBottom: 24 }}
+            type="info"
+            showIcon
+            message="目前代码工具只支持自动生成Spring Boot和 Ant Design pro4 ts版"
+          />
           <Form
             ref={this.formRef}
             onFinish={this.onFinish}
@@ -63,6 +70,21 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
               orderList: true,
             }}
           >
+            <FormItem
+              {...formItemLayout}
+              label="所属模块"
+              name="entityId"
+              rules={[
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ]}
+            >
+              <Select>
+                <Select.Option value="mysql">mysql</Select.Option>
+              </Select>
+            </FormItem>
             <FormItem
               {...formItemLayout}
               label="字段名"
@@ -110,28 +132,39 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
                 <Select.Option value="Set">Set</Select.Option>
                 <Select.Option value="Date">Date</Select.Option>
                 <Select.Option value="BigDecimal">BigDecimal</Select.Option>
+                <Select.Option value="dependence">依赖</Select.Option>
               </Select>
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  <span>数据格式 </span>
-                  <Tooltip placement="top" title="只对字段类型为String才有效果">
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                </span>
-              }
-              name="dataType"
-            >
-              <Radio.Group>
-                <Radio value="email">邮箱</Radio>
-                <Radio value="mobile">手机号</Radio>
-              </Radio.Group>
-            </FormItem>
-            <FormItem {...formItemLayout} label="正则校验" name="regexps" extra='多个请用";"分隔'>
-              <Input />
-            </FormItem>
+            {current && current.getFieldValue('type') === 'dependence' ? <div>11111</div> : null}
+            {current && current.getFieldValue('type') === 'String' ? (
+              <>
+                <FormItem
+                  {...formItemLayout}
+                  label={
+                    <span>
+                      <span>数据格式 </span>
+                      <Tooltip placement="top" title="只对字段类型为String才有效果">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </span>
+                  }
+                  name="dataType"
+                >
+                  <Radio.Group>
+                    <Radio value="email">邮箱</Radio>
+                    <Radio value="mobile">手机号</Radio>
+                  </Radio.Group>
+                </FormItem>
+                <FormItem
+                  {...formItemLayout}
+                  label="正则校验"
+                  name="regexps"
+                  extra='多个请用";"分隔'
+                >
+                  <Input />
+                </FormItem>
+              </>
+            ) : null}
             <FormItem {...formItemLayout} label="设置" style={{ marginBottom: 0 }}>
               <FormItem
                 name="isNull"
