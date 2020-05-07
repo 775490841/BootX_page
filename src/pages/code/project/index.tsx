@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Input, Row, message, Tag, Modal, Select, DatePicker } from 'antd';
+import { Button, Card, Col, Form, Input, Row, message, Modal, Select, DatePicker } from 'antd';
 import {
   PlusOutlined,
   ReloadOutlined,
@@ -12,7 +12,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
 import { FormInstance } from 'antd/lib/form';
-import { getSiteInfo, parseFormValues } from '@/utils/common';
+import { parseFormValues } from '@/utils/common';
 import { history } from '@@/core/history';
 import MyAuthorized from '@/pages/MyAuthorized';
 import { StateType } from './model';
@@ -27,7 +27,7 @@ const FormItem = Form.Item;
 interface TableListProps {
   dispatch: Dispatch<any>;
   loading: boolean;
-  admin: StateType;
+  project: StateType;
 }
 
 interface TableListState {
@@ -43,37 +43,16 @@ class TableList extends Component<TableListProps, TableListState> {
 
   columns: StandardTableColumnProps[] = [
     {
-      title: '编号',
-      dataIndex: 'cardNo',
-      width: 70,
-    },
-    {
-      title: '姓名',
+      title: '项目名',
       dataIndex: 'name',
-      width: 100,
     },
     {
-      title: '用户名',
-      dataIndex: 'username',
-    },
-    {
-      title: '邮箱',
-      dataIndex: 'email',
-    },
-    {
-      title: '手机号',
-      dataIndex: 'mobile',
-      width: 110,
-    },
-    {
-      title: '部门',
-      dataIndex: 'departmentName',
+      title: '项目描述',
+      dataIndex: 'memo',
     },
     {
       title: '状态',
-      dataIndex: 'isEnabled',
-      width: 60,
-      render: (text) => (text ? <Tag color="#108ee9">启用</Tag> : <Tag color="#f50">禁用</Tag>),
+      dataIndex: 'status',
     },
     {
       title: '创建时间',
@@ -89,25 +68,17 @@ class TableList extends Component<TableListProps, TableListState> {
         <Fragment>
           <MyAuthorized
             authorizedType="a"
-            authority={['/system/admin/edit', '/system/admin/update']}
-            onClick={() => history.push(`/system/admin/edit/${record.id}`)}
+            authority={['/code/project/edit', '/code/project/update']}
+            onClick={() => history.push(`/code/project/edit/${record.id}`)}
             title="编辑"
             divider
           />
-
           <MyAuthorized
             authorizedType="a"
-            authority={['/system/admin/delete']}
+            authority={['/code/project/delete']}
             onClick={() => this.update(record, 'remove')}
             title="删除"
             divider
-          />
-
-          <MyAuthorized
-            authorizedType="a"
-            authority={['/system/admin/resetPwd']}
-            onClick={() => this.update(record, 'reset')}
-            title="重置密码"
           />
         </Fragment>
       ),
@@ -121,7 +92,7 @@ class TableList extends Component<TableListProps, TableListState> {
   list = (params: {}) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'admin/list',
+      type: 'project/list',
       payload: {
         ...params,
       },
@@ -150,12 +121,6 @@ class TableList extends Component<TableListProps, TableListState> {
       if (type1 === 'remove') {
         return '您正在执行账号删除操作';
       }
-      if (type1 === 'enabled') {
-        return '您正在执行账号启用操作';
-      }
-      if (type1 === 'reset') {
-        return `您正在执行账户重置密码操作，密码将重置为${getSiteInfo('defaultPassword')}！！！`;
-      }
       if (type1 === 'disabled') {
         return '您正在执行账号禁用操作';
       }
@@ -170,7 +135,7 @@ class TableList extends Component<TableListProps, TableListState> {
       onOk: () => {
         const { dispatch } = this.props;
         dispatch({
-          type: `admin/${type1}`,
+          type: `project/${type1}`,
           payload: {
             ids,
           },
@@ -205,12 +170,12 @@ class TableList extends Component<TableListProps, TableListState> {
       <Form ref={this.searchForm} onFinish={this.handleSearch}>
         <Row gutter={16}>
           <Col md={5}>
-            <FormItem label="姓名" name="name">
+            <FormItem label="名称" name="name">
               <Input placeholder="请输入" />
             </FormItem>
           </Col>
           <Col md={5}>
-            <FormItem label="手机号" name="mobile">
+            <FormItem label="描述" name="memo">
               <Input placeholder="请输入" />
             </FormItem>
           </Col>
@@ -218,8 +183,10 @@ class TableList extends Component<TableListProps, TableListState> {
             <FormItem label="状态" name="isEnabled">
               <Select>
                 <Select.Option value="">全部</Select.Option>
-                <Select.Option value="true">启用</Select.Option>
-                <Select.Option value="false">禁用</Select.Option>
+                <Select.Option value="0">未开始</Select.Option>
+                <Select.Option value="1">进行中</Select.Option>
+                <Select.Option value="2">已结束</Select.Option>
+                <Select.Option value="3">已挂起</Select.Option>
               </Select>
             </FormItem>
           </Col>
@@ -242,7 +209,7 @@ class TableList extends Component<TableListProps, TableListState> {
 
   render() {
     const {
-      admin: { data },
+      project: { data },
       loading,
     } = this.props;
 
@@ -257,7 +224,7 @@ class TableList extends Component<TableListProps, TableListState> {
               <Button
                 disabled={loading}
                 icon={<PlusOutlined />}
-                onClick={() => history.push('/system/admin/add')}
+                onClick={() => history.push('/code/project/add')}
                 type="primary"
               >
                 新建
@@ -272,8 +239,8 @@ class TableList extends Component<TableListProps, TableListState> {
               </Button>
               <MyAuthorized
                 authorizedType="button"
-                type="danger"
-                authority={['/system/admin/delete']}
+                type="primary"
+                authority={['/code/project/delete']}
                 title="删除"
                 disabled={selectedRows.length === 0}
                 icon={<DeleteOutlined />}
@@ -299,23 +266,20 @@ class TableList extends Component<TableListProps, TableListState> {
 
 export default connect(
   ({
-    admin,
+    project,
     loading,
   }: {
-    admin: StateType;
+    project: StateType;
     loading: {
       effects: {
         [key: string]: boolean;
       };
     };
   }) => ({
-    admin,
+    project,
     loading:
-      loading.effects['admin/list'] ||
-      loading.effects['admin/disabled'] ||
-      loading.effects['admin/enabled'] ||
-      loading.effects['admin/reset'] ||
-      loading.effects['admin/save'] ||
-      loading.effects['admin/update'],
+      loading.effects['project/list'] ||
+      loading.effects['project/save'] ||
+      loading.effects['project/update'],
   }),
 )(TableList);
