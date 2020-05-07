@@ -28,9 +28,19 @@ function buildRoutes(authRoutes1) {
 export function patchRoutes({ routes }) {
   // 清空左侧路由
   routes[0].routes[1].routes.splice(0, 100);
-  console.log('aa', buildRoutes(authRoutes));
   buildRoutes(authRoutes).forEach((item) => {
     routes[0].routes[1].routes.push(item);
+  });
+  routes[0].routes[1].routes.push({
+    path: '/index',
+    component: dynamic({ component: () => import(`@/pages/index`) }),
+  });
+  routes[0].routes[1].routes.push({
+    path: '/',
+    redirect: '/index',
+  });
+  routes[0].routes[1].routes.push({
+    component: dynamic({ component: () => import(`@/pages/exception/404`) }),
   });
 }
 
