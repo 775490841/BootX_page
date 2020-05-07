@@ -27,7 +27,7 @@ function buildRoutes(authRoutes1) {
  */
 export function patchRoutes({ routes }) {
   // 清空左侧路由
-  routes[0].routes[1].routes.splice(0, 100);
+  // routes[0].routes[1].routes.splice(0, 100);
   buildRoutes(authRoutes).forEach((item) => {
     routes[0].routes[1].routes.push(item);
   });
@@ -51,7 +51,7 @@ export function patchRoutes({ routes }) {
 export function render(oldRender: any) {
   // 权限路由。
   getAuthRoutes((data: { [key: string]: any }) => {
-    authRoutes = data.menus;
+    authRoutes = data?.menus || [];
     oldRender();
   });
   // 系统配置信息
