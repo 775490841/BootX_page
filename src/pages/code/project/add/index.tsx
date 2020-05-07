@@ -78,13 +78,13 @@ class CreateFrom extends Component<CreateFromProps> {
     };
     return (
       <PageHeaderWrapper title={false}>
-        <Alert
-          style={{ marginBottom: 24 }}
-          type="info"
-          showIcon
-          message="目前代码工具只支持自动生成Spring Boot和 Ant Design pro4 ts版"
-        />
         <Card bordered={false}>
+          <Alert
+            style={{ marginBottom: 24 }}
+            type="info"
+            showIcon
+            message="目前代码工具只支持自动生成Spring Boot和 Ant Design pro4 ts版"
+          />
           <Form
             ref={this.formRef}
             onFinish={this.onFinish}
