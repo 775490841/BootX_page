@@ -2,7 +2,9 @@ import request from '@/utils/request';
 import constants from '@/utils/constants';
 
 export async function queryCurrent() {
-  return request(`${constants.baseUrl}/currentUser`);
+  return request(`${constants.baseUrl}/currentUser`, {
+    method: 'POST',
+  });
 }
 
 export async function queryProvince() {

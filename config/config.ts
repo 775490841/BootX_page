@@ -6,6 +6,7 @@ import webpackPlugin from './plugin.config';
 const { winPath } = utils; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 // import systeMenus from './menus/system';
+import codeMenus from './menus/code';
 
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV, GA_KEY } = process.env;
 export default defineConfig({
@@ -61,7 +62,7 @@ export default defineConfig({
           path: '/',
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
-          routes: [],
+          routes: [codeMenus],
         },
       ],
     },

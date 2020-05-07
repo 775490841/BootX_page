@@ -3,9 +3,9 @@ import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import React, { Component } from 'react';
 import { Dispatch, AnyAction, connect } from 'umi';
 import { uuid } from '@/utils/common';
+import constants from '@/utils/constants';
 import { StateType } from './model';
 import styles from './style.less';
-import constants from '@/utils/constants';
 
 interface LoginProps {
   dispatch: Dispatch<AnyAction>;
