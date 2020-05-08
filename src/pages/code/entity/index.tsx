@@ -27,7 +27,7 @@ const FormItem = Form.Item;
 interface TableListProps {
   dispatch: Dispatch<any>;
   loading: boolean;
-  admin: StateType;
+  entity: StateType;
 }
 
 interface TableListState {
@@ -43,31 +43,22 @@ class TableList extends Component<TableListProps, TableListState> {
 
   columns: StandardTableColumnProps[] = [
     {
-      title: '编号',
-      dataIndex: 'cardNo',
-      width: 70,
+      title: '项目',
+      dataIndex: 'projectName',
+      width: 100,
     },
     {
-      title: '姓名',
+      title: '模块中文名',
       dataIndex: 'name',
       width: 100,
     },
     {
-      title: '用户名',
-      dataIndex: 'username',
+      title: '模块英文名',
+      dataIndex: 'alias',
     },
     {
-      title: '邮箱',
-      dataIndex: 'email',
-    },
-    {
-      title: '手机号',
-      dataIndex: 'mobile',
-      width: 110,
-    },
-    {
-      title: '部门',
-      dataIndex: 'departmentName',
+      title: '描述',
+      dataIndex: 'memo',
     },
     {
       title: '状态',
@@ -89,25 +80,17 @@ class TableList extends Component<TableListProps, TableListState> {
         <Fragment>
           <MyAuthorized
             authorizedType="a"
-            authority={['/system/admin/edit', '/system/admin/update']}
-            onClick={() => history.push(`/system/admin/edit/${record.id}`)}
+            authority={['/code/entity/edit', '/code/entity/update']}
+            onClick={() => history.push(`/code/entity/edit/${record.id}`)}
             title="编辑"
             divider
           />
 
           <MyAuthorized
             authorizedType="a"
-            authority={['/system/admin/delete']}
+            authority={['/code/entity/delete']}
             onClick={() => this.update(record, 'remove')}
             title="删除"
-            divider
-          />
-
-          <MyAuthorized
-            authorizedType="a"
-            authority={['/system/admin/resetPwd']}
-            onClick={() => this.update(record, 'reset')}
-            title="重置密码"
           />
         </Fragment>
       ),
@@ -121,7 +104,7 @@ class TableList extends Component<TableListProps, TableListState> {
   list = (params: {}) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'admin/list',
+      type: 'entity/list',
       payload: {
         ...params,
       },
@@ -170,7 +153,7 @@ class TableList extends Component<TableListProps, TableListState> {
       onOk: () => {
         const { dispatch } = this.props;
         dispatch({
-          type: `admin/${type1}`,
+          type: `entity/${type1}`,
           payload: {
             ids,
           },
@@ -242,7 +225,7 @@ class TableList extends Component<TableListProps, TableListState> {
 
   render() {
     const {
-      admin: { data },
+      entity: { data },
       loading,
     } = this.props;
 
@@ -257,7 +240,7 @@ class TableList extends Component<TableListProps, TableListState> {
               <Button
                 disabled={loading}
                 icon={<PlusOutlined />}
-                onClick={() => history.push('/system/admin/add')}
+                onClick={() => history.push('/code/entity/add')}
                 type="primary"
               >
                 新建
@@ -273,7 +256,7 @@ class TableList extends Component<TableListProps, TableListState> {
               <MyAuthorized
                 authorizedType="button"
                 type="danger"
-                authority={['/system/admin/delete']}
+                authority={['/code/entity/delete']}
                 title="删除"
                 disabled={selectedRows.length === 0}
                 icon={<DeleteOutlined />}
@@ -299,23 +282,22 @@ class TableList extends Component<TableListProps, TableListState> {
 
 export default connect(
   ({
-    admin,
+    entity,
     loading,
   }: {
-    admin: StateType;
+    entity: StateType;
     loading: {
       effects: {
         [key: string]: boolean;
       };
     };
   }) => ({
-    admin,
+    entity,
     loading:
-      loading.effects['admin/list'] ||
-      loading.effects['admin/disabled'] ||
-      loading.effects['admin/enabled'] ||
-      loading.effects['admin/reset'] ||
-      loading.effects['admin/save'] ||
-      loading.effects['admin/update'],
+      loading.effects['entity/list'] ||
+      loading.effects['entity/disabled'] ||
+      loading.effects['entity/enabled'] ||
+      loading.effects['entity/save'] ||
+      loading.effects['entity/update'],
   }),
 )(TableList);

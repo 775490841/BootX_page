@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Input, Row, message, Modal, Select, DatePicker } from 'antd';
+import { Button, Card, Col, Form, Input, Row, message, Modal, Select, DatePicker, Tag } from 'antd';
 import {
   PlusOutlined,
   ReloadOutlined,
@@ -53,6 +53,22 @@ class TableList extends Component<TableListProps, TableListState> {
     {
       title: '状态',
       dataIndex: 'status',
+      width: 80,
+      render: (text) => {
+        if (text === 0) {
+          return <Tag>未开始</Tag>;
+        }
+        if (text === 1) {
+          return <Tag>进行中</Tag>;
+        }
+        if (text === 2) {
+          return <Tag>已结束</Tag>;
+        }
+        if (text === 3) {
+          return <Tag>已挂起</Tag>;
+        }
+        return <Tag>{text}</Tag>;
+      },
     },
     {
       title: '创建时间',
@@ -63,7 +79,7 @@ class TableList extends Component<TableListProps, TableListState> {
     },
     {
       title: '操作',
-      width: 220,
+      width: 100,
       render: (text, record: TableListItem) => (
         <Fragment>
           <MyAuthorized
@@ -78,7 +94,6 @@ class TableList extends Component<TableListProps, TableListState> {
             authority={['/code/project/delete']}
             onClick={() => this.update(record, 'remove')}
             title="删除"
-            divider
           />
         </Fragment>
       ),

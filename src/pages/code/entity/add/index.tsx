@@ -9,6 +9,11 @@ import { StateType } from '../model';
 
 const FormItem = Form.Item;
 
+interface Project {
+  id: number;
+  name: string;
+}
+
 interface CreateFromProps {
   submitting: boolean;
   dispatch: Dispatch<any>;
@@ -19,22 +24,34 @@ interface CreateFromProps {
   };
 }
 
-interface RoleList {
-  id: number;
-  name: string;
+interface CreateFromState {
+  projects: Project[];
 }
 
-class CreateFrom extends Component<CreateFromProps> {
+class CreateFrom extends Component<CreateFromProps, CreateFromState> {
   formRef = React.createRef<FormInstance>();
+
+  state = {
+    projects: [],
+  };
 
   componentDidMount(): void {
     const {
       dispatch,
       match: { params = {} },
     } = this.props;
+    dispatch({
+      type: 'entity/project',
+      payload: params,
+      callback: (response: Project[]) => {
+        this.setState({
+          projects: response,
+        });
+      },
+    });
     if (params && Object.keys(params).length > 0 && params.id) {
       dispatch({
-        type: 'admin/edit',
+        type: 'entity/edit',
         payload: params,
         callback: (response: TableListItem) => {
           const { current } = this.formRef;
@@ -49,12 +66,12 @@ class CreateFrom extends Component<CreateFromProps> {
   onFinish = (values: { [key: string]: any }) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'admin/save',
+      type: 'entity/save',
       payload: values,
       callback: (response: { type: string; content: string }) => {
         const { type, content } = response;
         if (type === 'success') {
-          history.push('/system/admin');
+          history.push('/code/entity');
         } else {
           message.error(content);
         }
@@ -64,6 +81,7 @@ class CreateFrom extends Component<CreateFromProps> {
 
   render() {
     const { submitting } = this.props;
+    const { projects } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -95,7 +113,6 @@ class CreateFrom extends Component<CreateFromProps> {
             onFinish={this.onFinish}
             initialValues={{
               status: 0,
-              dataSourceType: 'mysql',
               parentClass: 'BaseEntity',
             }}
           >
@@ -115,8 +132,9 @@ class CreateFrom extends Component<CreateFromProps> {
               ]}
             >
               <Select>
-                <Select.Option value={1}>A 项目</Select.Option>
-                <Select.Option value={2}>B 项目</Select.Option>
+                {projects.map((item: Project) => (
+                  <Select.Option value={item.id}>{item.name}</Select.Option>
+                ))}
               </Select>
             </FormItem>
             <FormItem
@@ -134,8 +152,26 @@ class CreateFrom extends Component<CreateFromProps> {
             </FormItem>
             <FormItem
               {...formItemLayout}
+              label="模块英文名"
+              name="alias"
+              rules={[
+                {
+                  required: true,
+                  message: '必填',
+                },
+                {
+                  pattern: /^[A-Za-z]+$/,
+                  message: '只能是字母',
+                },
+              ]}
+              help="系统根据该名称生成表，表名称：表前缀_模块英文名"
+            >
+              <Input />
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
               label="模块描述"
-              name="description"
+              name="memo"
               rules={[
                 {
                   required: true,
@@ -143,20 +179,6 @@ class CreateFrom extends Component<CreateFromProps> {
                 },
               ]}
               help="系统根据描述来生成注释"
-            >
-              <Input />
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="模块英文名"
-              name="name"
-              rules={[
-                {
-                  required: true,
-                  message: '必填',
-                },
-              ]}
-              help="系统根据该名称生成表，表名称：表前缀_模块英文名"
             >
               <Input />
             </FormItem>
@@ -170,7 +192,7 @@ class CreateFrom extends Component<CreateFromProps> {
               <Button type="primary" htmlType="submit" loading={submitting}>
                 保存
               </Button>
-              <Button onClick={() => history.push('/system/admin')} style={{ marginLeft: 8 }}>
+              <Button onClick={() => history.push('/code/entity')} style={{ marginLeft: 8 }}>
                 返回
               </Button>
             </FormItem>
@@ -182,8 +204,14 @@ class CreateFrom extends Component<CreateFromProps> {
 }
 
 export default connect(
-  ({ admin, loading }: { admin: StateType; loading: { effects: { [key: string]: boolean } } }) => ({
-    admin,
-    submitting: loading.effects['admin/save'] || loading.effects['admin/departmentTree'],
+  ({
+    entity,
+    loading,
+  }: {
+    entity: StateType;
+    loading: { effects: { [key: string]: boolean } };
+  }) => ({
+    entity,
+    submitting: loading.effects['entity/save'] || loading.effects['entity/project'],
   }),
 )(CreateFrom);
