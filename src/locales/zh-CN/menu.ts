@@ -93,4 +93,10 @@ export default {
   'menu.code.column': '属性管理',
   'menu.code.column.add': '添加',
   'menu.code.column.edit': '修改',
+
+  'menu.flow': '流程管理',
+  'menu.flow.model': '模型管理',
+  'menu.flow.deploy': '流程部署',
+  'menu.flow.follow': '流程跟踪',
+  'menu.flow.manager': '流程管理',
 };
