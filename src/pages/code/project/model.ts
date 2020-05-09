@@ -1,20 +1,6 @@
 import { AnyAction, Reducer } from 'umi';
 import { EffectsCommandMap } from 'dva';
-import {
-  list,
-  edit,
-  save,
-  remove,
-  roleList,
-  disabled,
-  enabled,
-  reset,
-  permission,
-  checkExport,
-  importSave,
-  departmentTree,
-  add,
-} from './service';
+import { list, edit, save, remove } from './service';
 
 import { TableListData, TableListItem } from './data.d';
 
@@ -36,15 +22,6 @@ export interface ModelType {
     save: Effect;
     remove: Effect;
     edit: Effect;
-    roleList: Effect;
-    disabled: Effect;
-    enabled: Effect;
-    reset: Effect;
-    permission: Effect;
-    checkExport: Effect;
-    importSave: Effect;
-    departmentTree: Effect;
-    add: Effect;
   };
   reducers: {
     listInfo: Reducer<StateType>;
@@ -89,60 +66,6 @@ const Model: ModelType = {
         type: 'editInfo',
         payload: response,
       });
-      if (callback) {
-        callback(response);
-      }
-    },
-    *roleList({ payload, callback }, { call }) {
-      const response = yield call(roleList, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *enabled({ payload, callback }, { call }) {
-      const response = yield call(enabled, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *disabled({ payload, callback }, { call }) {
-      const response = yield call(disabled, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *reset({ payload, callback }, { call }) {
-      const response = yield call(reset, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *permission({ payload, callback }, { call }) {
-      const response = yield call(permission, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *checkExport({ payload, callback }, { call }) {
-      const response = yield call(checkExport, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *importSave({ payload, callback }, { call }) {
-      const response = yield call(importSave, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *departmentTree({ payload, callback }, { call }) {
-      const response = yield call(departmentTree, payload);
-      if (callback) {
-        callback(response);
-      }
-    },
-    *add({ payload, callback }, { call }) {
-      const response = yield call(add, payload);
       if (callback) {
         callback(response);
       }
