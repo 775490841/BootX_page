@@ -1,7 +1,7 @@
 import { Alert, Form, Input, Button, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import React, { Component } from 'react';
-import { Dispatch, AnyAction, connect } from 'umi';
+import { Dispatch, AnyAction, connect, history } from 'umi';
 import { uuid } from '@/utils/common';
 import constants from '@/utils/constants';
 import { StateType } from './model';
@@ -110,6 +110,7 @@ class Login extends Component<LoginProps, LoginState> {
             <Button size="large" type="primary" htmlType="submit" block>
               登录
             </Button>
+            <a onClick={() => history.push('/user/register')}>账号注册</a>
           </Form.Item>
         </Form>
       </div>

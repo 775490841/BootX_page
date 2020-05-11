@@ -14,6 +14,7 @@ import {
   importSave,
   departmentTree,
   add,
+  postList,
 } from './service';
 
 import { TableListData, TableListItem } from './data.d';
@@ -37,6 +38,7 @@ export interface ModelType {
     remove: Effect;
     edit: Effect;
     roleList: Effect;
+    postList: Effect;
     disabled: Effect;
     enabled: Effect;
     reset: Effect;
@@ -95,6 +97,12 @@ const Model: ModelType = {
     },
     *roleList({ payload, callback }, { call }) {
       const response = yield call(roleList, payload);
+      if (callback) {
+        callback(response);
+      }
+    },
+    *postList({ payload, callback }, { call }) {
+      const response = yield call(postList, payload);
       if (callback) {
         callback(response);
       }

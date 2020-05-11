@@ -42,6 +42,7 @@ interface RoleList {
 interface CreateFromState {
   departmentTree: DepartmentTree[];
   roleList: RoleList[];
+  postList: RoleList[];
   readonly: boolean;
 }
 
@@ -51,6 +52,7 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
   state: CreateFromState = {
     departmentTree: [],
     roleList: [],
+    postList: [],
     readonly: false,
   };
 
@@ -72,6 +74,14 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
       callback: (response: RoleList[]) => {
         this.setState({
           roleList: response,
+        });
+      },
+    });
+    dispatch({
+      type: 'admin/postList',
+      callback: (response: RoleList[]) => {
+        this.setState({
+          postList: response,
         });
       },
     });
@@ -134,7 +144,7 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
 
   render() {
     const { submitting } = this.props;
-    const { departmentTree, roleList, readonly } = this.state;
+    const { departmentTree, roleList, readonly, postList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -193,11 +203,19 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
                   {...formItemLayout}
                   label="用户名"
                   name="username"
-                  help="设置完成之后，不能修改"
+                  extra="设置完成之后，不能修改"
                   rules={[
                     {
                       required: true,
                       message: '必填',
+                    },
+                    {
+                      min: 4,
+                      message: '用户名长度不能少于4个字符',
+                    },
+                    {
+                      max: 20,
+                      message: '用户名长度不能超过20个字符',
                     },
                   ]}
                 >
@@ -238,9 +256,32 @@ class CreateFrom extends Component<CreateFromProps, CreateFromState> {
                       message: '必填',
                     },
                   ]}
-                  help="由系统生成，不能修改"
+                  extra="由系统生成，不能修改"
                 >
                   <Input readOnly />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label="所属岗位"
+                  name="postId"
+                  rules={[
+                    {
+                      required: true,
+                      message: '必填',
+                    },
+                  ]}
+                >
+                  <Select showSearch showArrow>
+                    {postList.map((item) => (
+                      <Select.Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </FormItem>
               </Col>
             </Row>

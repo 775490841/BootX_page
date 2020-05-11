@@ -55,6 +55,15 @@ export async function roleList(params: TableListParams) {
   });
 }
 
+export async function postList(params: TableListParams) {
+  return request(`${constants.baseUrl}/post/all`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
 export async function enabled(params: TableListParams) {
   return request(`${constants.baseUrl}/admin/enabled`, {
     method: 'POST',
