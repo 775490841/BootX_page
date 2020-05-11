@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, message } from 'antd';
+import { Card, message, Row, Col } from 'antd';
 import { Dispatch, history } from 'umi';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { StateType } from '../model';
-
-import styles from './index.less';
 
 interface CreateFromProps {
   submitting: boolean;
@@ -38,7 +36,22 @@ class CreateFrom extends Component<CreateFromProps> {
     return (
       <PageHeaderWrapper title={false}>
         <Card bordered={false}>
-          <iframe className={styles.iframe} title="flowable" src="http://localhost:9990" />
+          <Row>
+            <Col span={24}>
+              <iframe
+                width="100%"
+                height={700}
+                frameBorder="no"
+                border="0"
+                marginWidth="0"
+                marginHeight="0"
+                scrolling="no"
+                allowTransparency="yes"
+                title="flowable"
+                src="http://flowable.i-gomall.com:9990/"
+              />
+            </Col>
+          </Row>
         </Card>
       </PageHeaderWrapper>
     );
