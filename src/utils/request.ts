@@ -53,17 +53,22 @@ const errorHandler = (error: { response: Response }): Response => {
   return response;
 };
 
-/**
- * 配置request请求时的默认参数
- */
-const headers: any = {
-  Authorization: localStorage.getItem('token'),
-};
 const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   requestType: 'form',
-  headers,
+});
+
+request.interceptors.request.use((url, options) => {
+  return {
+    url,
+    options: {
+      ...options,
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    },
+  };
 });
 
 export default request;
